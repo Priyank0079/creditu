@@ -126,13 +126,19 @@ const AuthScreen = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="mb-10 flex flex-col items-center text-center"
             >
-                <div className="relative mb-6">
-                    <div className="absolute inset-0 bg-white/20 blur-2xl rounded-full scale-150" />
-                    <img
-                        src="/images/image.png"
-                        alt="Creditu Logo"
-                        className="h-10 w-auto object-contain relative z-10"
+                <div className="relative mb-6 group">
+                    <motion.div
+                        animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.3, 0.1] }}
+                        transition={{ duration: 4, repeat: Infinity }}
+                        className="absolute inset-[-15px] bg-white blur-2xl rounded-full"
                     />
+                    <div className="bg-white px-5 py-2.5 rounded-2xl shadow-xl shadow-black/10 relative z-10 border border-white/20">
+                        <img
+                            src="/images/image.png"
+                            alt="Creditu Logo"
+                            className="h-8 w-auto object-contain"
+                        />
+                    </div>
                 </div>
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/10">
                     <ShieldCheck size={14} className="text-trust" />

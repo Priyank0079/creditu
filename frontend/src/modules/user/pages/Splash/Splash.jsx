@@ -18,12 +18,19 @@ const Splash = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="pt-12 flex flex-col items-center"
             >
-                <div className="mb-6">
-                    <img
-                        src="/images/image.png"
-                        alt="Creditu Logo"
-                        className="h-16 w-auto object-contain mix-blend-multiply"
+                <div className="mb-6 relative group">
+                    <motion.div
+                        animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
+                        transition={{ duration: 3, repeat: Infinity }}
+                        className="absolute inset-[-10px] bg-white/20 blur-xl rounded-full"
                     />
+                    <div className="bg-white px-6 py-3 rounded-2xl shadow-xl shadow-black/10 relative z-10 border border-white/20">
+                        <img
+                            src="/images/image.png"
+                            alt="Creditu Logo"
+                            className="h-8 w-auto object-contain"
+                        />
+                    </div>
                 </div>
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
                     <Zap size={14} className="text-gold fill-gold" />

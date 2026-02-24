@@ -66,11 +66,14 @@ const Navbar = () => {
                     <Link to="/dashboard" className="flex items-center gap-3 group">
                         <div className="relative">
                             <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-                            <img
-                                src="/images/image.png"
-                                alt="Creditu"
-                                className="h-9 w-auto object-contain relative transition-transform duration-500 group-hover:scale-105"
-                            />
+                            <div className={`px-4 py-1.5 rounded-xl transition-all duration-500 flex items-center justify-center ${!scrolled ? 'bg-white shadow-sm border border-gray-100/50' : ''
+                                }`}>
+                                <img
+                                    src="/images/image.png"
+                                    alt="Creditu"
+                                    className="h-8 w-auto object-contain relative transition-transform duration-500 group-hover:scale-105"
+                                />
+                            </div>
                         </div>
                     </Link>
 
