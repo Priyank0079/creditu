@@ -4,9 +4,28 @@
 
 @layer base {
   body {
-    @apply bg-background text-textPrimary antialiased;
+    @apply text-textPrimary antialiased;
     margin: 0;
     font-family: 'Inter', sans-serif;
+    /* Premium top→bottom gradient background — theme colors */
+    background: linear-gradient(180deg,
+        #e8f0fb 0%,
+        /* light primary blue (top) */
+        #ede8f8 20%,
+        /* soft violet transition */
+        #f5effe 38%,
+        /* light purple mid */
+        #fbf5ff 55%,
+        /* near-white lavender */
+        #fef9f0 75%,
+        /* warm gold tint */
+        #fff8e8 90%,
+        /* soft gold lower */
+        #fef5e0 100%
+        /* warm cream (bottom) */
+      );
+    min-height: 100vh;
+    background-attachment: fixed;
   }
 }
 
@@ -58,4 +77,86 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* ── Premium Animated Gradient Utilities ──────────────────────── */
+
+/* Keyframe: gradient flows bottom→top→bottom, duration 1.6s */
+@keyframes gradientFlow {
+  0% {
+    background-position: 50% 100%;
+  }
+
+  50% {
+    background-position: 50% 0%;
+  }
+
+  100% {
+    background-position: 50% 100%;
+  }
+}
+
+/* Hero/card background with animated #FFCCFF → #FFFF99 gradient */
+.animate-gradient-bg {
+  background: linear-gradient(180deg, #FFCCFF 0%, #FFFF99 50%, #FFCCFF 100%);
+  background-size: 100% 300%;
+  animation: gradientFlow 1.6s ease-in-out infinite;
+}
+
+/* Subtle card accent overlay (use on ::before or wrapper divs) */
+.animate-gradient-accent {
+  background: linear-gradient(180deg,
+      rgba(255, 204, 255, 0.18) 0%,
+      rgba(255, 255, 153, 0.12) 50%,
+      rgba(255, 204, 255, 0.18) 100%);
+  background-size: 100% 300%;
+  animation: gradientFlow 1.6s ease-in-out infinite;
+}
+
+/* Text highlight gradient */
+.gradient-text-highlight {
+  background: linear-gradient(90deg, #FFCCFF, #FFFF99);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Navbar gradient border animation */
+@keyframes navBorderFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes floatGlow {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.4;
+  }
+
+  50% {
+    transform: translate(20px, -20px) scale(1.1);
+    opacity: 0.6;
+  }
+}
+
+.purple-light-effect {
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: -1;
+  animation: floatGlow 10s ease-in-out infinite;
 }

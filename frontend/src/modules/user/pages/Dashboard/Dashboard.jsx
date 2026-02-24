@@ -15,6 +15,7 @@ import MainLayout from '../../layouts/MainLayout.jsx';
 import LoanCard from '../../components/loan/LoanCard.jsx';
 import ProgressCard from '../../components/loan/LoanProgressCard.jsx';
 import CategoryCard from '../../components/loan/LoanCategoryCard.jsx';
+import HeroCarousel from '../../components/loan/HeroCarousel.jsx';
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -63,7 +64,12 @@ const Dashboard = () => {
 
     return (
         <MainLayout>
-            <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
+            {/* ── Full-width Hero Carousel */}
+            <div style={{ padding: '0 0 28px' }}>
+                <HeroCarousel onCtaClick={handleApply} />
+            </div>
+
+            <div className="max-w-7xl mx-auto px-4 md:px-6 pb-8">
                 {/* Header Section */}
                 <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
                     <div>
@@ -76,7 +82,11 @@ const Dashboard = () => {
                         </motion.h1>
                         <p className="text-textSecondary font-medium mt-1">Here's your loan application status.</p>
                     </div>
-                    <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border border-border cursor-pointer hover:border-gold/50 transition-colors" onClick={() => navigate('/status')}>
+                    <div
+                        onClick={() => navigate('/status')}
+                        className="flex items-center gap-3 p-2 rounded-2xl border border-[rgba(11,60,109,0.12)] cursor-pointer hover:border-gold/50 transition-all hover:shadow-md"
+                        style={{ background: 'linear-gradient(135deg, rgba(232,240,251,0.9) 0%, rgba(237,232,248,0.9) 50%, rgba(254,249,240,0.9) 100%)', backdropFilter: 'blur(8px)' }}
+                    >
                         <div className="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center text-gold">
                             <TrendingUp size={20} />
                         </div>
@@ -113,22 +123,44 @@ const Dashboard = () => {
                 {/* Categories Grid */}
                 <section className="mb-12">
                     <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-xl font-bold text-primary">Loan Categories</h2>
+                        <div className="flex items-center gap-3">
+                            <div style={{ width: 4, height: 26, borderRadius: 4, background: 'linear-gradient(180deg,#F4A100,#FFD166)', boxShadow: '0 0 10px rgba(244,161,0,0.3)', flexShrink: 0 }} />
+                            <h2 className="text-xl font-bold text-primary" style={{ letterSpacing: '-0.02em' }}>Loan Categories</h2>
+                        </div>
                         <p className="text-xs font-bold text-textSecondary uppercase tracking-widest">Select to proceed</p>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+                    <motion.div
+                        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-5"
+                        variants={{ visible: { transition: { staggerChildren: 0.09, delayChildren: 0.1 } } }}
+                        initial="hidden"
+                        animate="visible"
+                    >
                         {categories.map((cat) => (
-                            <div key={cat.id} onClick={() => !cat.disabled && navigate(cat.path)}>
+                            <motion.div
+                                key={cat.id}
+                                variants={{ hidden: { opacity: 0, y: 22 }, visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 130, damping: 18 } } }}
+                                onClick={() => !cat.disabled && navigate(cat.path)}
+                            >
                                 <CategoryCard {...cat} />
-                            </div>
+                            </motion.div>
                         ))}
-                    </div>
+                    </motion.div>
                 </section>
 
                 {/* Account Summary Snippet */}
-                <section className="bg-primary/5 rounded-[32px] p-8 border border-primary/10 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-20 -mt-20 blur-3xl" />
+                <section
+                    className="rounded-[32px] p-8 border relative overflow-hidden"
+                    style={{
+                        background: 'linear-gradient(135deg, rgba(232,240,251,0.85) 0%, rgba(237,232,248,0.85) 30%, rgba(245,239,254,0.85) 60%, rgba(254,245,224,0.85) 100%)',
+                        borderColor: 'rgba(11,60,109,0.10)',
+                        backdropFilter: 'blur(12px)',
+                        boxShadow: '0 4px 32px rgba(11,60,109,0.07), inset 0 1px 0 rgba(255,255,255,0.6)',
+                    }}
+                >
+                    {/* Decorative blobs */}
+                    <div className="absolute top-0 right-0 w-64 h-64 rounded-full -mr-20 -mt-20 blur-3xl" style={{ background: 'radial-gradient(circle, rgba(255,204,255,0.25) 0%, transparent 70%)' }} />
+                    <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full -ml-16 -mb-16 blur-3xl" style={{ background: 'radial-gradient(circle, rgba(255,255,153,0.20) 0%, transparent 70%)' }} />
                     <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
                         <div className="text-center md:text-left">
                             <h3 className="text-2xl font-black text-primary mb-2">Grow with Creditu</h3>
@@ -140,7 +172,8 @@ const Dashboard = () => {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => navigate('/status')}
-                            className="bg-primary text-white px-8 py-4 rounded-2xl font-bold shadow-lg shadow-primary/30 min-w-[200px]"
+                            style={{ background: 'linear-gradient(135deg, #0B3C6D 0%, #1a5a9e 100%)', boxShadow: '0 8px 24px rgba(11,60,109,0.30)' }}
+                            className="text-white px-8 py-4 rounded-2xl font-bold min-w-[200px]"
                         >
                             Complete Profile
                         </motion.button>

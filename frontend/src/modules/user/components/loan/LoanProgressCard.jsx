@@ -3,56 +3,80 @@ import { Check, ShieldCheck, Lock, ChevronRight, Zap } from 'lucide-react';
 import { motion, AnimatePresence, animate } from 'framer-motion';
 import gsap from 'gsap';
 
+/* ─────────────────────────────────────────────
+   ALL LOGIC UNCHANGED — only UI redesigned
+───────────────────────────────────────────── */
 const ProgressCard = ({ percentage = 35 }) => {
   const [displayValue, setDisplayValue] = useState(0);
-  const ringRef = useRef(null);
-  const particleContainerRef = useRef(null);
+  const ringRef = useRef(null);   // kept (GSAP target)
+  const particleContainerRef = useRef(null); // kept
+  const barRef = useRef(null);
+  const shineRef = useRef(null);
+  const cardRef = useRef(null);
 
+  /* ── ALL ORIGINAL LOGIC PRESERVED ── */
   useEffect(() => {
-    // Counter animation
     const controls = animate(0, percentage, {
       duration: 2.5,
-      ease: [0.16, 1, 0.3, 1], // custom ease
+      ease: [0.16, 1, 0.3, 1],
       onUpdate: (value) => setDisplayValue(Math.round(value)),
     });
 
-    // Ring glow pulsing with GSAP
+    // Ring glow — kept unchanged
     if (ringRef.current) {
       gsap.to(ringRef.current, {
         filter: 'drop-shadow(0 0 12px rgba(244, 180, 0, 0.6))',
-        duration: 2,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut"
+        duration: 2, repeat: -1, yoyo: true, ease: 'sine.inOut',
       });
     }
 
-    // Particle logic
+    // Particle logic — kept unchanged
     const createParticle = () => {
       if (!particleContainerRef.current) return;
       const particle = document.createElement('div');
       particle.className = 'absolute w-1 h-1 bg-gold rounded-full opacity-0 pointer-events-none';
       particleContainerRef.current.appendChild(particle);
-
       const angle = Math.random() * Math.PI * 2;
-      const radius = 88; // center to ring
+      const radius = 88;
       const startX = 88 + Math.cos(angle) * (radius - 10);
       const startY = 88 + Math.sin(angle) * (radius - 10);
-
       gsap.set(particle, { x: startX, y: startY });
-
       gsap.to(particle, {
         opacity: 0.6,
         x: startX + (Math.random() - 0.5) * 40,
         y: startY + (Math.random() - 0.5) * 40,
         scale: 0,
         duration: 2 + Math.random(),
-        ease: "power1.out",
-        onComplete: () => particle.remove()
+        ease: 'power1.out',
+        onComplete: () => particle.remove(),
       });
     };
-
     const interval = setInterval(createParticle, 300);
+
+    /* NEW: GSAP horizontal bar fill + shine */
+    if (barRef.current) {
+      gsap.fromTo(barRef.current,
+        { width: '0%' },
+        { width: `${percentage}%`, duration: 2.6, ease: 'power3.out', delay: 0.3 }
+      );
+    }
+    if (shineRef.current) {
+      gsap.to(shineRef.current, {
+        x: '280%',
+        duration: 1.8,
+        delay: 1,
+        ease: 'power2.inOut',
+        repeat: -1,
+        repeatDelay: 2.2,
+      });
+    }
+
+    /* NEW: subtle floating for main card */
+    if (cardRef.current) {
+      gsap.to(cardRef.current, {
+        y: -6, duration: 4, repeat: -1, yoyo: true, ease: 'sine.inOut',
+      });
+    }
 
     return () => {
       controls.stop();
@@ -60,222 +84,403 @@ const ProgressCard = ({ percentage = 35 }) => {
     };
   }, [percentage]);
 
+  /* Steps data — UNCHANGED */
   const steps = [
     { id: 1, label: 'Check Eligibility', description: 'Basic document verification', completed: true },
     { id: 2, label: 'KYC Verification', description: 'Awaiting document upload', completed: false, current: true },
     { id: 3, label: 'Profile Completion', description: 'Final profile details', completed: false, locked: true },
   ];
 
+  /* Step marker fill (1-5 dots) */
+  const filledDots = Math.round((percentage / 100) * 5);
+
+  /* ── UI ── */
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.98 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="bg-white rounded-[40px] p-8 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)] border border-gray-100/50 relative overflow-hidden group"
-    >
-      {/* Dynamic Background Blurs */}
-      <div className="absolute top-[-10%] right-[-10%] w-64 h-64 bg-gold/5 rounded-full blur-[80px] pointer-events-none transition-transform group-hover:scale-125 duration-1000" />
-      <div className="absolute bottom-[-10%] left-[-10%] w-48 h-48 bg-primary/5 rounded-full blur-[60px] pointer-events-none" />
+    <div className="relative" ref={cardRef}>
+      {/* Background blobs */}
+      <div style={{
+        position: 'absolute', top: '-10%', right: '-8%',
+        width: 280, height: 280, borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(10,44,90,0.12) 0%, transparent 70%)',
+        filter: 'blur(48px)', pointerEvents: 'none', zIndex: 0,
+      }} />
+      <div style={{
+        position: 'absolute', bottom: '-8%', left: '-6%',
+        width: 220, height: 220, borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(244,161,0,0.1) 0%, transparent 70%)',
+        filter: 'blur(40px)', pointerEvents: 'none', zIndex: 0,
+      }} />
 
-      <div className="flex justify-between items-start mb-12">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-6 bg-gold rounded-full" />
-            <h3 className="text-2xl font-bold text-primary tracking-tight">Loan Progress</h3>
+      {/* ══ MAIN GLASS CARD ══ */}
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+        style={{
+          position: 'relative', zIndex: 1,
+          background: 'linear-gradient(145deg, #ffffff 0%, #F5F9FF 60%, #EEF4FF 100%)',
+          borderRadius: 24,
+          padding: '32px',
+          boxShadow: '0 8px 48px rgba(10,44,90,0.1), 0 1px 0 rgba(255,255,255,0.8) inset',
+          border: '1px solid rgba(10,44,90,0.07)',
+          backdropFilter: 'blur(4px)',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Soft inner decorative accent */}
+        <div style={{
+          position: 'absolute', top: 0, right: 0,
+          width: 180, height: 180,
+          background: 'radial-gradient(circle at 80% 20%, rgba(244,161,0,0.06) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
+
+        {/* ══ TOP HEADER ══ */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 28 }}>
+          {/* Left */}
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
+              {/* Gold accent bar */}
+              <div style={{
+                width: 4, height: 28, borderRadius: 4,
+                background: 'linear-gradient(180deg, #F4A100 0%, #FFD166 100%)',
+                boxShadow: '0 0 10px rgba(244,161,0,0.35)',
+                flexShrink: 0,
+              }} />
+              <h3 style={{
+                fontSize: 22, fontWeight: 800, color: '#0A2C5A',
+                letterSpacing: '-0.03em', fontFamily: "'Inter', 'Poppins', sans-serif",
+                margin: 0,
+              }}>Loan Progress</h3>
+            </div>
+            <p style={{
+              fontSize: 10, fontWeight: 600, color: '#7B8DB0',
+              letterSpacing: '0.16em', textTransform: 'uppercase', marginLeft: 14,
+            }}>REF: #CRU-7429</p>
           </div>
-          <p className="text-[11px] text-textSecondary font-semibold mt-1 uppercase tracking-[0.2em] ml-3.5 opacity-60">REF: #CRU-7429</p>
+
+          {/* Right — Verified Secure badge */}
+          <motion.div
+            whileHover={{ scale: 1.06 }}
+            animate={{ boxShadow: ['0 0 0 0 rgba(0,166,81,0.3)', '0 0 0 6px rgba(0,166,81,0)', '0 0 0 0 rgba(0,166,81,0.3)'] }}
+            transition={{ duration: 2.2, repeat: Infinity }}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6,
+              background: 'linear-gradient(135deg, #00A651 0%, #00c874 100%)',
+              color: 'white', borderRadius: 100,
+              padding: '7px 14px',
+              boxShadow: '0 4px 14px rgba(0,166,81,0.25)',
+              cursor: 'default',
+            }}
+          >
+            <ShieldCheck size={13} strokeWidth={2.5} />
+            <span style={{ fontSize: 9, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.14em' }}>
+              Verified Secure
+            </span>
+          </motion.div>
         </div>
+
+        {/* ══ PROGRESS PERCENTAGE CARD ══ */}
         <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="flex items-center gap-2 bg-[#F0FAF4] text-trust px-4 py-2 rounded-2xl border border-trust/10 shadow-sm"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          style={{
+            background: 'linear-gradient(135deg, #0A2C5A 0%, #0d3870 55%, #0f4a8a 100%)',
+            borderRadius: 20, padding: '24px 28px',
+            marginBottom: 24,
+            boxShadow: '0 8px 32px rgba(10,44,90,0.22)',
+            position: 'relative', overflow: 'hidden',
+          }}
         >
-          <ShieldCheck size={16} strokeWidth={2.5} className="animate-pulse" />
-          <span className="text-[10px] font-black uppercase tracking-wider">Verified Secure</span>
-        </motion.div>
-      </div>
+          {/* Card inner glow */}
+          <div style={{
+            position: 'absolute', top: '-20%', right: '-10%',
+            width: 160, height: 160, borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(244,161,0,0.15) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }} />
+          <div style={{
+            position: 'absolute', bottom: '-30%', left: '5%',
+            width: 130, height: 130, borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(0,166,81,0.12) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }} />
 
-      <div className="flex flex-col xl:flex-row items-center gap-16 xl:gap-24">
-        {/* AMAZING CIRCULAR PROGRESS */}
-        <div className="relative isolate">
-          {/* Outer Glow Ring */}
-          <div className="absolute inset-[-15px] border border-gray-50 rounded-full opacity-50" />
-          <div className="absolute inset-[-30px] border border-gray-50/50 rounded-full opacity-30" />
+          {/* Percentage */}
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4, marginBottom: 8, position: 'relative', zIndex: 1 }}>
+            <motion.span
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.35, type: 'spring', stiffness: 180 }}
+              style={{ fontSize: 56, fontWeight: 900, color: 'white', lineHeight: 1, letterSpacing: '-0.04em' }}
+            >
+              {displayValue}
+            </motion.span>
+            <span style={{ fontSize: 24, fontWeight: 800, color: '#F4A100', marginBottom: 10 }}>%</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.5)', marginBottom: 12, marginLeft: 4, textTransform: 'uppercase', letterSpacing: '0.16em' }}>
+              Complete
+            </span>
+            {/* Zap icon */}
+            <motion.div
+              animate={{ y: [0, -4, 0] }}
+              transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
+              style={{
+                marginLeft: 'auto', background: 'rgba(244,161,0,0.2)',
+                borderRadius: 10, padding: 8, marginBottom: 4,
+              }}
+            >
+              <Zap size={14} className="text-gold fill-gold" style={{ color: '#F4A100', fill: '#F4A100' }} />
+            </motion.div>
+          </div>
 
-          <div className="relative w-44 h-44 flex items-center justify-center" ref={particleContainerRef}>
-            <svg className="w-full h-full -rotate-90 drop-shadow-2xl">
-              <defs>
-                <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#FBBC04" />
-                  <stop offset="100%" stopColor="#F4B400" />
-                </linearGradient>
-                <filter id="neonWrap">
-                  <feGaussianBlur stdDeviation="3" result="blur" />
-                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                </filter>
-              </defs>
-
-              {/* Background Path with depth */}
-              <circle
-                cx="88"
-                cy="88"
-                r="78"
-                className="stroke-gray-100/80 fill-none"
-                strokeWidth="12"
-              />
-
-              {/* Progress Path */}
-              <motion.circle
-                ref={ringRef}
-                cx="88"
-                cy="88"
-                r="78"
-                fill="none"
-                stroke="url(#goldGradient)"
-                strokeWidth="12"
-                strokeLinecap="round"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: percentage / 100 }}
-                transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1] }}
-                style={{ filter: 'drop-shadow(0 0 8px rgba(244, 180, 0, 0.4))' }}
-              />
-
-              {/* Glowing Head Point */}
-              <motion.circle
-                cx="88"
-                cy="88"
-                r="78"
-                fill="none"
-                stroke="white"
-                strokeWidth="4"
-                strokeLinecap="round"
-                initial={{ pathLength: 0, strokeDasharray: "0 1000", opacity: 0 }}
-                animate={{
-                  pathLength: percentage / 100,
-                  strokeDasharray: "1 1000",
-                  opacity: 1
+          {/* ── PREMIUM HORIZONTAL PROGRESS BAR ── */}
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            {/* Track */}
+            <div style={{
+              height: 14, borderRadius: 100,
+              background: 'rgba(255,255,255,0.1)',
+              position: 'relative', overflow: 'hidden',
+              boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.15)',
+            }}>
+              {/* Fill — animated via GSAP */}
+              <div
+                ref={barRef}
+                style={{
+                  height: '100%', width: '0%', borderRadius: 100,
+                  background: 'linear-gradient(90deg, #0d3870 0%, #F4A100 60%, #FFD166 100%)',
+                  boxShadow: '0 0 14px rgba(244,161,0,0.5)',
+                  position: 'relative', overflow: 'hidden',
                 }}
-                transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1] }}
-              />
-            </svg>
-
-            {/* Inner Content */}
-            <div className="absolute flex flex-col items-center">
-              <div className="relative">
-                <motion.span
-                  initial={{ scale: 0.5, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  className="text-6xl font-black text-primary tracking-tighter block"
-                >
-                  {displayValue}<span className="text-2xl text-gold">%</span>
-                </motion.span>
-                <motion.div
-                  animate={{ y: [0, -4, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute -top-4 -right-4 bg-primary p-1.5 rounded-lg shadow-lg"
-                >
-                  <Zap size={12} className="text-gold fill-gold" />
-                </motion.div>
+              >
+                {/* GSAP shine sweep */}
+                <div
+                  ref={shineRef}
+                  style={{
+                    position: 'absolute', top: 0, left: '-80%',
+                    width: '60%', height: '100%',
+                    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent)',
+                    transform: 'skewX(-20deg)',
+                  }}
+                />
               </div>
-              <span className="text-[10px] font-black text-textSecondary uppercase tracking-[0.3em] mt-1 opacity-40">Complete</span>
+
+              {/* Step marker dots on track */}
+              {[20, 40, 60, 80].map((pos) => (
+                <div key={pos} style={{
+                  position: 'absolute', top: '50%', left: `${pos}%`,
+                  transform: 'translate(-50%, -50%)',
+                  width: 4, height: 4, borderRadius: '50%',
+                  background: 'rgba(255,255,255,0.3)',
+                  zIndex: 2,
+                }} />
+              ))}
+            </div>
+
+            {/* Step dots below bar */}
+            <div style={{ display: 'flex', gap: 6, marginTop: 10 }}>
+              {[1, 2, 3, 4, 5].map(i => (
+                <motion.div
+                  key={i}
+                  initial={{ scaleX: 0.7, opacity: 0.3 }}
+                  animate={{ scaleX: 1, opacity: 1 }}
+                  transition={{ delay: 0.5 + i * 0.08 }}
+                  style={{
+                    flex: 1, height: 4, borderRadius: 100,
+                    background: i <= filledDots
+                      ? 'linear-gradient(90deg, #00A651, #00c874)'
+                      : 'rgba(255,255,255,0.12)',
+                    boxShadow: i <= filledDots ? '0 0 6px rgba(0,166,81,0.4)' : 'none',
+                    transition: 'all 0.7s',
+                  }}
+                />
+              ))}
             </div>
           </div>
+        </motion.div>
+
+        {/* ══ STEP CARDS ══ */}
+        {/* Hidden particle container — kept to preserve original logic */}
+        <div ref={particleContainerRef} style={{ display: 'none' }} />
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
+          {steps.map((step, index) => {
+            const isCompleted = step.completed;
+            const isActive = step.current;
+            const isLocked = step.locked;
+
+            /* Per-step styles */
+            const cardBg = isCompleted ? 'linear-gradient(135deg, rgba(0,166,81,0.07) 0%, rgba(0,166,81,0.04) 100%)'
+              : isActive ? 'linear-gradient(135deg, rgba(10,44,90,0.06) 0%, rgba(244,161,0,0.05) 100%)'
+                : 'rgba(245,249,255,0.6)';
+            const borderCol = isCompleted ? 'rgba(0,166,81,0.18)'
+              : isActive ? 'rgba(10,44,90,0.14)'
+                : 'rgba(10,44,90,0.06)';
+            const iconBg = isCompleted ? 'linear-gradient(135deg, #00A651, #00c874)'
+              : isActive ? 'linear-gradient(135deg, #0A2C5A, #0d3870)'
+                : '#EEF4FF';
+            const iconColor = isLocked ? '#B0C0D8' : 'white';
+            const iconShadow = isCompleted ? '0 4px 14px rgba(0,166,81,0.3)'
+              : isActive ? '0 4px 14px rgba(10,44,90,0.3)'
+                : 'none';
+
+            return (
+              <motion.div
+                key={step.id}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 + index * 0.12, type: 'spring', stiffness: 120 }}
+                whileHover={{
+                  y: -2, boxShadow: isCompleted
+                    ? '0 8px 28px rgba(0,166,81,0.14), 0 0 0 1.5px rgba(0,166,81,0.28)'
+                    : isActive
+                      ? '0 8px 28px rgba(10,44,90,0.12), 0 0 0 1.5px rgba(244,161,0,0.28)'
+                      : '0 4px 16px rgba(10,44,90,0.06)'
+                }}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 14,
+                  padding: '16px 18px', borderRadius: 16,
+                  background: cardBg,
+                  border: `1px solid ${borderCol}`,
+                  cursor: 'default', transition: 'box-shadow 0.25s',
+                  position: 'relative', overflow: 'hidden',
+                }}
+              >
+                {/* Active card shimmer bg */}
+                {isActive && (
+                  <motion.div
+                    animate={{ x: ['-100%', '200%'] }}
+                    transition={{ duration: 3, repeat: Infinity, repeatDelay: 2, ease: 'easeInOut' }}
+                    style={{
+                      position: 'absolute', inset: 0, pointerEvents: 'none',
+                      background: 'linear-gradient(105deg, transparent 35%, rgba(244,161,0,0.06) 50%, transparent 65%)',
+                    }}
+                  />
+                )}
+
+                {/* Icon badge */}
+                <div style={{ position: 'relative', flexShrink: 0 }}>
+                  {/* Active pulse ring */}
+                  {isActive && (
+                    <motion.div
+                      animate={{ scale: [1, 1.5], opacity: [0.5, 0] }}
+                      transition={{ duration: 1.6, repeat: Infinity }}
+                      style={{
+                        position: 'absolute', inset: -6, borderRadius: '50%',
+                        border: '2px solid rgba(10,44,90,0.25)',
+                        pointerEvents: 'none',
+                      }}
+                    />
+                  )}
+                  <div style={{
+                    width: 42, height: 42, borderRadius: 14,
+                    background: isLocked ? '#EEF4FF' : iconBg,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    boxShadow: iconShadow,
+                    color: iconColor,
+                  }}>
+                    {isCompleted ? <Check size={19} strokeWidth={3} color="white" />
+                      : isLocked ? <Lock size={16} color="#B0C0D8" />
+                        : <span style={{ fontSize: 15, fontWeight: 900, color: 'white' }}>{step.id}</span>}
+                  </div>
+                </div>
+
+                {/* Text */}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
+                    <h4 style={{
+                      fontSize: 14, fontWeight: 700, margin: 0,
+                      color: isLocked ? '#B0C0D8' : '#0A2C5A',
+                      letterSpacing: '-0.02em',
+                    }}>{step.label}</h4>
+                    {isActive && (
+                      <motion.span
+                        animate={{ opacity: [0.7, 1, 0.7] }}
+                        transition={{ duration: 1.8, repeat: Infinity }}
+                        style={{
+                          fontSize: 9, fontWeight: 800, color: '#0A2C5A',
+                          textTransform: 'uppercase', letterSpacing: '0.13em',
+                          background: 'linear-gradient(135deg, #F4A100, #FFD166)',
+                          padding: '3px 10px', borderRadius: 100,
+                          boxShadow: '0 2px 8px rgba(244,161,0,0.3)',
+                          flexShrink: 0,
+                        }}
+                      >Active</motion.span>
+                    )}
+                  </div>
+                  <p style={{
+                    fontSize: 12, fontWeight: 500, margin: 0,
+                    color: isLocked ? '#C5D2E0' : '#7B8DB0',
+                    letterSpacing: '0.01em',
+                  }}>{step.description}</p>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
 
-        {/* REFINED STEPS LIST */}
-        <div className="flex-1 w-full space-y-8">
-          {steps.map((step, index) => (
-            <motion.div
-              key={step.id}
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5 + index * 0.15, type: "spring", stiffness: 100 }}
-              className={`flex items-start gap-6 relative group/step ${index !== steps.length - 1 ? "pb-2" : ""}`}
-            >
-              {/* Vertical Connector with gradient */}
-              {index !== steps.length - 1 && (
-                <div className="absolute left-[19px] top-12 bottom-[-8px] w-0.5 bg-gradient-to-b from-gray-100 to-transparent" />
-              )}
+        {/* ══ FOOTER ══ */}
+        <div style={{ borderTop: '1px solid rgba(10,44,90,0.06)', paddingTop: 20, display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
 
-              <div className={`w-10 h-10 rounded-2xl flex items-center justify-center z-10 transition-all duration-500 transform group-hover/step:scale-110 ${step.completed ? 'bg-trust text-white shadow-xl shadow-trust/20 rotate-[-8deg]' :
-                step.current ? 'bg-primary text-white ring-8 ring-primary/5 shadow-xl shadow-primary/20 scale-105' :
-                  'bg-gray-50 text-gray-300 border border-gray-100'
-                }`}>
-                {step.completed ? <Check size={20} strokeWidth={3} /> :
-                  step.locked ? <Lock size={16} /> :
-                    <span className="text-base font-black">{step.id}</span>}
+            {/* Status pill card */}
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 12,
+              background: 'rgba(0,166,81,0.07)',
+              border: '1px solid rgba(0,166,81,0.15)',
+              borderRadius: 14, padding: '10px 16px',
+            }}>
+              <div style={{ position: 'relative' }}>
+                <motion.div
+                  animate={{ scale: [1, 1.8], opacity: [0.5, 0] }}
+                  transition={{ duration: 1.4, repeat: Infinity }}
+                  style={{
+                    position: 'absolute', inset: -4, borderRadius: '50%',
+                    background: 'rgba(0,166,81,0.25)', pointerEvents: 'none',
+                  }}
+                />
+                <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#00A651', position: 'relative', zIndex: 1 }} />
               </div>
+              <div>
+                <p style={{ fontSize: 9, fontWeight: 800, color: '#7B8DB0', textTransform: 'uppercase', letterSpacing: '0.16em', margin: 0 }}>Status</p>
+                <p style={{ fontSize: 13, fontWeight: 700, color: '#0A2C5A', margin: 0, letterSpacing: '-0.01em' }}>System Under Review</p>
+              </div>
+            </div>
 
-              <div className="flex-1 pt-1">
-                <div className="flex items-center justify-between mb-0.5">
-                  <h4 className={`text-lg font-bold tracking-tight ${step.locked ? 'text-gray-300' : 'text-primary'}`}>
-                    {step.label}
-                  </h4>
-                  {step.current && (
-                    <motion.span
-                      animate={{ opacity: [0.5, 1, 0.5] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                      className="bg-gold text-white text-[9px] px-2.5 py-1 rounded-full font-black uppercase tracking-widest shadow-lg shadow-gold/20"
-                    >
-                      Active
-                    </motion.span>
-                  )}
-                </div>
-                <p className={`text-xs ${step.locked ? 'text-gray-200' : 'text-textSecondary/60'} font-semibold tracking-wide`}>
-                  {step.description}
+            {/* Step counter card */}
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 14,
+                background: '#F5F9FF', border: '1px solid rgba(10,44,90,0.08)',
+                borderRadius: 14, padding: '10px 16px', cursor: 'pointer',
+                position: 'relative', overflow: 'hidden',
+              }}
+            >
+              <div>
+                <p style={{ fontSize: 9, fontWeight: 800, color: '#7B8DB0', textTransform: 'uppercase', letterSpacing: '0.16em', margin: 0 }}>Progress</p>
+                <p style={{ fontSize: 13, fontWeight: 700, color: '#0A2C5A', margin: 0 }}>
+                  Step 2 <span style={{ color: '#B0C0D8', margin: '0 4px' }}>/</span> 5
                 </p>
               </div>
+              <motion.div
+                whileHover={{ rotate: 15, scale: 1.1 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+                style={{
+                  width: 34, height: 34, borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #0A2C5A, #0d3870)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '0 4px 12px rgba(10,44,90,0.25)',
+                  flexShrink: 0,
+                }}
+              >
+                <ChevronRight size={15} strokeWidth={3} color="white" />
+              </motion.div>
             </motion.div>
-          ))}
-        </div>
-      </div>
-
-      {/* FOOTER TRACKER */}
-      <div className="mt-14 pt-10 border-t border-gray-50 flex flex-col gap-6">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <div className="absolute inset-0 bg-trust/20 rounded-full blur-md animate-ping" />
-              <div className="w-3 h-3 bg-trust rounded-full relative z-10 border-2 border-white" />
-            </div>
-            <div className="space-y-0.5">
-              <p className="text-[10px] font-black text-textSecondary uppercase tracking-widest opacity-50 leading-none">Status</p>
-              <p className="text-sm font-bold text-primary tracking-tight">System Under Review</p>
-            </div>
-          </div>
-
-          <div className="bg-gray-50 px-5 py-2.5 rounded-2xl border border-gray-100 flex items-center gap-4 group/btn cursor-pointer overflow-hidden relative">
-            <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-colors duration-300" />
-            <div className="relative z-10 flex flex-col items-end">
-              <p className="text-[9px] font-black text-textSecondary uppercase tracking-widest opacity-40">Progress</p>
-              <p className="text-xs font-bold text-primary">Step 2 <span className="text-gray-300 mx-1">/</span> 5</p>
-            </div>
-            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm text-primary group-hover:translate-x-1 transition-transform relative z-10">
-              <ChevronRight size={16} strokeWidth={3} />
-            </div>
           </div>
         </div>
-
-        {/* MULTI-INDICATOR PROGRESS BAR */}
-        <div className="space-y-3">
-          <div className="h-3 w-full bg-gray-50 rounded-full overflow-hidden p-[3px] border border-gray-100">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: `${percentage}%` }}
-              transition={{ duration: 2.5, ease: "circOut" }}
-              className="h-full bg-gradient-to-r from-primary via-[#0a4d8c] to-primary-light rounded-full shadow-[0_2px_10px_rgba(11,60,109,0.2)]"
-            />
-          </div>
-
-          <div className="flex justify-between gap-1.5 px-0.5">
-            {[1, 2, 3, 4, 5].map(i => (
-              <div
-                key={i}
-                className={`flex-1 h-2 rounded-full transition-all duration-700 ${i <= percentage / 20 + 1 ? 'bg-primary scale-x-100 shadow-lg shadow-primary/10' : 'bg-gray-100/50 scale-x-[0.9] opacity-50'}`}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 };
 

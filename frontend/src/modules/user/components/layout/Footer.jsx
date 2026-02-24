@@ -12,6 +12,7 @@ const Footer = () => {
                 src="/images/image.png"
                 alt="Creditu Logo"
                 className="h-8 w-auto object-contain"
+                style={{ mixBlendMode: 'multiply' }}
               />
             </div>
             <p className="text-textSecondary text-sm max-w-sm leading-relaxed">

@@ -9,9 +9,7 @@ import {
     LayoutDashboard,
     ShieldCheck,
     MessageSquare,
-    Search,
     ChevronDown,
-    Zap,
     Crown
 } from 'lucide-react';
 
@@ -21,22 +19,18 @@ const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
+    const [notifPulse, setNotifPulse] = useState(true);
     const menuRef = useRef(null);
 
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
-
-            // Set scrolled state for background changes
             setScrolled(currentScrollY > 20);
-
-            // Visibility logic: Hide if scrolling down, Show if scrolling up
             if (currentScrollY > lastScrollY && currentScrollY > 100) {
                 setIsVisible(false);
             } else {
                 setIsVisible(true);
             }
-
             setLastScrollY(currentScrollY);
         };
         window.addEventListener('scroll', handleScroll, { passive: true });
@@ -54,162 +48,277 @@ const Navbar = () => {
     }, []);
 
     return (
-        <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-700 ease-in-out ${isVisible ? 'translate-y-0' : '-translate-y-full'
-            } ${scrolled
-                ? 'h-20 bg-white/90 backdrop-blur-3xl border-b border-gray-100 shadow-[0_8px_40px_rgba(0,0,0,0.02)]'
-                : 'h-24 bg-transparent'
-            }`}>
-            <div className="max-w-screen-2xl mx-auto h-full px-8 flex items-center justify-between">
+        <>
+            {/* ── Animated gradient keyframes injected once */}
+            <style>{`
+                @keyframes navGradientShift {
+                    0%   { background-position: 0% 50%; }
+                    50%  { background-position: 100% 50%; }
+                    100% { background-position: 0% 50%; }
+                }
+                .nav-gradient-border::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    height: 1.5px;
+                    background: linear-gradient(90deg, #FFCCFF, #FFFF99, #FFCCFF, #FFFF99);
+                    background-size: 300% 100%;
+                    animation: navGradientShift 3s ease infinite;
+                    opacity: 0.85;
+                }
+                .notif-glow:hover {
+                    box-shadow: 0 0 20px rgba(255, 204, 255, 0.55);
+                }
+                .avatar-glow:hover {
+                    box-shadow: 0 0 22px rgba(255, 204, 255, 0.50);
+                }
+                @keyframes bellWiggle {
+                    0%,100%{ transform: rotate(0deg); }
+                    20%    { transform: rotate(-18deg); }
+                    40%    { transform: rotate(18deg); }
+                    60%    { transform: rotate(-10deg); }
+                    80%    { transform: rotate(10deg); }
+                }
+                .bell-animate { animation: bellWiggle 0.6s ease; }
+            `}</style>
 
-                {/* Brand Logo - Minimalist approach */}
-                <div className="flex items-center gap-12">
-                    <Link to="/dashboard" className="flex items-center gap-3 group">
-                        <div className="relative">
-                            <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-                            <div className={`px-4 py-1.5 rounded-xl transition-all duration-500 flex items-center justify-center ${!scrolled ? 'bg-white shadow-sm border border-gray-100/50' : ''
-                                }`}>
-                                <img
-                                    src="/images/image.png"
-                                    alt="Creditu"
-                                    className="h-8 w-auto object-contain relative transition-transform duration-500 group-hover:scale-105"
-                                />
-                            </div>
-                        </div>
+            <motion.nav
+                animate={{ y: isVisible ? 0 : -90 }}
+                transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
+                className={`nav-gradient-border fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${scrolled
+                    ? 'shadow-[0_8px_32px_rgba(11,60,109,0.09)]'
+                    : ''
+                    }`}
+                style={{
+                    background: scrolled
+                        ? 'linear-gradient(135deg, rgba(232,240,251,0.92) 0%, rgba(237,232,248,0.90) 50%, rgba(245,239,254,0.88) 100%)'
+                        : 'linear-gradient(135deg, rgba(232,240,251,0.72) 0%, rgba(245,239,254,0.60) 100%)',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
+                    position: 'fixed',
+                }}
+            >
+                <div
+                    style={{
+                        maxWidth: 900,
+                        margin: '0 auto',
+                        padding: '0 20px',
+                        height: 64,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                    }}
+                >
+                    {/* ── LEFT: Logo */}
+                    <Link to="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
+                        <motion.div
+                            whileHover={{ scale: 1.06 }}
+                            transition={{ duration: 0.3, ease: 'easeOut' }}
+                            style={{ display: 'flex', alignItems: 'center' }}
+                        >
+                            <img
+                                src="/images/image.png"
+                                alt="Creditu"
+                                style={{
+                                    height: 32,
+                                    width: 'auto',
+                                    objectFit: 'contain',
+                                    filter: 'drop-shadow(0 2px 8px rgba(11,60,109,0.18))',
+                                }}
+                            />
+                        </motion.div>
                     </Link>
 
-                    {/* Navigation - Ultra clean */}
-                    <div className="hidden xl:flex items-center gap-2">
-                        {['Dashboard', 'Loan Offers', 'Investments', 'Support'].map((item) => (
-                            <button key={item} className="px-5 py-2 rounded-xl text-[11px] font-black uppercase tracking-[0.2em] text-primary/40 hover:text-primary transition-all relative group">
-                                {item}
-                                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-primary group-hover:w-4 transition-all duration-300" />
-                            </button>
-                        ))}
-                    </div>
-                </div>
+                    {/* ── RIGHT: Bell + Avatar */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
 
-                {/* Integrated Controls Section */}
-                <div className="flex items-center gap-6">
-
-                    {/* Minimalist Search */}
-                    <div className="hidden md:flex items-center bg-gray-50/80 border border-gray-100 rounded-[20px] px-4 py-2 hover:bg-white hover:border-gray-200 transition-all focus-within:ring-4 ring-primary/5 group">
-                        <Search size={16} className="text-gray-300 group-focus-within:text-primary transition-colors" />
-                        <input
-                            type="text"
-                            placeholder="Find features..."
-                            className="bg-transparent border-none outline-none text-xs font-bold text-primary placeholder:text-gray-300 px-3 w-32 focus:w-48 transition-all"
-                        />
-                        <div className="flex gap-1">
-                            <kbd className="h-5 px-1.5 rounded border border-gray-200 bg-white text-[9px] font-black text-gray-300 flex items-center">CTRL</kbd>
-                            <kbd className="h-5 px-1.5 rounded border border-gray-200 bg-white text-[9px] font-black text-gray-300 flex items-center">K</kbd>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-2 px-2 py-1.5 bg-gray-50/50 rounded-2xl border border-gray-100/50">
-                        <button className="p-2.5 rounded-xl text-primary/30 hover:text-primary hover:bg-white hover:shadow-sm transition-all relative">
-                            <Bell size={18} strokeWidth={2.5} />
-                            <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-gold rounded-full ring-2 ring-white" />
-                        </button>
-                        <button className="hidden sm:block p-2.5 rounded-xl text-primary/30 hover:text-primary hover:bg-white hover:shadow-sm transition-all">
-                            <MessageSquare size={18} strokeWidth={2.5} />
-                        </button>
-                    </div>
-
-                    {/* NEW PROFESSIONAL PROFILE TRIGGER - No Background version */}
-                    <div className="relative" ref={menuRef}>
+                        {/* Bell */}
                         <motion.button
-                            onClick={() => setShowProfileMenu(!showProfileMenu)}
-                            className="flex items-center gap-4 group"
+                            whileHover={{ scale: 1.08 }}
+                            whileTap={{ scale: 0.93 }}
+                            onClick={() => setNotifPulse(false)}
+                            className="notif-glow"
+                            style={{
+                                position: 'relative',
+                                width: 40,
+                                height: 40,
+                                borderRadius: '50%',
+                                border: '1.5px solid rgba(255,204,255,0.45)',
+                                background: 'rgba(255,255,255,0.85)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                transition: 'background 0.3s, box-shadow 0.3s',
+                                backdropFilter: 'blur(8px)',
+                            }}
                         >
-                            <div className="relative p-0.5 rounded-2xl transition-all duration-500 group-hover:ring-8 ring-primary/5">
-                                <div className="w-11 h-11 rounded-[18px] border-2 border-gray-100 overflow-hidden shadow-sm group-hover:border-primary transition-colors">
-                                    <img
-                                        src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aman"
-                                        alt="User"
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-                                <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-white rounded-lg shadow-md border border-gray-100 flex items-center justify-center text-gold scale-0 group-hover:scale-100 transition-transform">
-                                    <Crown size={10} fill="currentColor" />
-                                </div>
-                            </div>
-
-                            <div className="hidden md:flex flex-col items-start text-left leading-none pr-2">
-                                <div className="flex items-center gap-1.5 mb-1">
-                                    <span className="text-xs font-black text-primary tracking-tight">Aman Srivastava</span>
-                                    <ChevronDown size={14} className={`text-gray-300 transition-transform duration-300 ${showProfileMenu ? 'rotate-180' : ''}`} />
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="h-1.5 w-1.5 rounded-full bg-trust animate-pulse" />
-                                    <span className="text-[10px] font-bold text-trust uppercase tracking-widest opacity-80">Elite Account</span>
-                                </div>
-                            </div>
+                            <Bell size={18} color="#0B3C6D" strokeWidth={2.2} />
+                            {notifPulse && (
+                                <span style={{
+                                    position: 'absolute',
+                                    top: 8,
+                                    right: 8,
+                                    width: 7,
+                                    height: 7,
+                                    borderRadius: '50%',
+                                    background: 'linear-gradient(135deg,#FFCCFF,#f472b6)',
+                                    border: '1.5px solid white',
+                                    boxShadow: '0 0 6px rgba(255,100,200,0.7)',
+                                }} />
+                            )}
                         </motion.button>
 
-                        {/* HIGH-END DROPDOWN MENU */}
-                        <AnimatePresence>
-                            {showProfileMenu && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: 15, scale: 0.95 }}
-                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                    exit={{ opacity: 0, y: 15, scale: 0.95 }}
-                                    className="absolute right-0 mt-6 w-80 bg-white rounded-[36px] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.12)] border border-gray-100 overflow-hidden z-[200]"
-                                >
-                                    {/* Minimalist Profile Header */}
-                                    <div className="p-8 pb-6 text-center border-b border-gray-50 bg-gradient-to-b from-gray-50/50 to-white">
-                                        <div className="w-20 h-20 rounded-[28px] border-4 border-white shadow-xl mx-auto mb-4 overflow-hidden ring-1 ring-gray-100">
-                                            <img
-                                                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aman"
-                                                alt="Aman"
-                                                className="w-full h-full object-cover"
-                                            />
+                        {/* Avatar + Profile Dropdown */}
+                        <div ref={menuRef} style={{ position: 'relative' }}>
+                            <motion.button
+                                onClick={() => setShowProfileMenu(!showProfileMenu)}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="avatar-glow"
+                                style={{
+                                    width: 40,
+                                    height: 40,
+                                    borderRadius: '50%',
+                                    border: '2px solid rgba(255,204,255,0.55)',
+                                    background: 'white',
+                                    overflow: 'hidden',
+                                    cursor: 'pointer',
+                                    padding: 0,
+                                    transition: 'box-shadow 0.3s',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    position: 'relative',
+                                }}
+                            >
+                                <img
+                                    src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aman"
+                                    alt="User"
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                />
+                                {/* Crown badge */}
+                                <div style={{
+                                    position: 'absolute', bottom: -2, right: -2,
+                                    width: 16, height: 16, background: 'white',
+                                    borderRadius: 5, border: '1px solid #f0e0ff',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    boxShadow: '0 2px 6px rgba(0,0,0,0.12)',
+                                }}>
+                                    <Crown size={9} color="#F4B400" fill="#F4B400" />
+                                </div>
+                            </motion.button>
+
+                            {/* Dropdown */}
+                            <AnimatePresence>
+                                {showProfileMenu && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 12, scale: 0.95 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        exit={{ opacity: 0, y: 12, scale: 0.95 }}
+                                        transition={{ type: 'spring', stiffness: 300, damping: 24 }}
+                                        style={{
+                                            position: 'absolute',
+                                            right: 0,
+                                            top: 'calc(100% + 12px)',
+                                            width: 280,
+                                            background: 'rgba(255,255,255,0.97)',
+                                            borderRadius: 28,
+                                            boxShadow: '0 24px 60px rgba(11,60,109,0.14)',
+                                            border: '1px solid rgba(255,204,255,0.3)',
+                                            overflow: 'hidden',
+                                            zIndex: 200,
+                                            backdropFilter: 'blur(20px)',
+                                        }}
+                                    >
+                                        {/* Header */}
+                                        <div style={{
+                                            padding: '24px 20px 16px',
+                                            textAlign: 'center',
+                                            borderBottom: '1px solid rgba(0,0,0,0.04)',
+                                            background: 'linear-gradient(160deg,rgba(255,204,255,0.1) 0%,rgba(255,255,153,0.06) 100%)',
+                                        }}>
+                                            <div style={{
+                                                width: 60, height: 60,
+                                                borderRadius: 20,
+                                                border: '2.5px solid rgba(255,204,255,0.45)',
+                                                overflow: 'hidden',
+                                                margin: '0 auto 10px',
+                                                boxShadow: '0 8px 20px rgba(255,100,200,0.18)',
+                                            }}>
+                                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aman" alt="Aman" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                            </div>
+                                            <h4 style={{ fontSize: 15, fontWeight: 800, color: '#0B3C6D', margin: '0 0 4px', letterSpacing: '-0.01em' }}>Aman Srivastava</h4>
+                                            <p style={{ fontSize: 10, fontWeight: 700, color: '#1FAF5A', margin: 0, textTransform: 'uppercase', letterSpacing: '0.12em' }}>Elite Account</p>
                                         </div>
-                                        <h4 className="text-xl font-black text-primary tracking-tight">Aman Srivastava</h4>
-                                        <p className="text-xs text-textSecondary/50 font-bold uppercase tracking-widest mt-1">ID: #CRU- Elite - 2026</p>
-                                    </div>
 
-                                    {/* Action Grid */}
-                                    <div className="p-4 grid grid-cols-1 gap-2">
-                                        {[
-                                            { icon: LayoutDashboard, label: 'Control Center', sub: 'Main Dashboard', color: 'text-blue-500', bg: 'bg-blue-50' },
-                                            { icon: ShieldCheck, label: 'KYC Status', sub: 'Verified Account', color: 'text-trust', bg: 'bg-trust/10' },
-                                            { icon: Settings, label: 'Preferences', sub: 'Account Settings', color: 'text-gray-400', bg: 'bg-gray-50' }
-                                        ].map((item, idx) => (
-                                            <button
-                                                key={idx}
-                                                className="w-full flex items-center justify-between p-4 hover:bg-gray-50 rounded-[24px] transition-all group/item"
+                                        {/* Menu Items */}
+                                        <div style={{ padding: '10px 12px' }}>
+                                            {[
+                                                { icon: LayoutDashboard, label: 'Dashboard', sub: 'Control Center', color: '#3b82f6', bg: '#eff6ff' },
+                                                { icon: ShieldCheck, label: 'KYC Status', sub: 'Verified', color: '#1FAF5A', bg: '#ebf9f1' },
+                                                { icon: Settings, label: 'Settings', sub: 'Preferences', color: '#6b7280', bg: '#f9fafb' },
+                                            ].map((item, idx) => (
+                                                <motion.button
+                                                    key={idx}
+                                                    whileHover={{ backgroundColor: 'rgba(0,0,0,0.03)', x: 2 }}
+                                                    style={{
+                                                        width: '100%', display: 'flex', alignItems: 'center',
+                                                        justifyContent: 'space-between', padding: '10px 10px',
+                                                        borderRadius: 16, border: 'none', background: 'transparent',
+                                                        cursor: 'pointer', marginBottom: 2,
+                                                    }}
+                                                >
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                                        <div style={{
+                                                            width: 36, height: 36, background: item.bg, borderRadius: 12,
+                                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                        }}>
+                                                            <item.icon size={16} color={item.color} strokeWidth={2.2} />
+                                                        </div>
+                                                        <div style={{ textAlign: 'left' }}>
+                                                            <div style={{ fontSize: 13, fontWeight: 700, color: '#0B3C6D', lineHeight: 1 }}>{item.label}</div>
+                                                            <div style={{ fontSize: 10, fontWeight: 600, color: '#aab0be', marginTop: 2 }}>{item.sub}</div>
+                                                        </div>
+                                                    </div>
+                                                    <ChevronRight size={13} color="#d1d5db" />
+                                                </motion.button>
+                                            ))}
+                                        </div>
+
+                                        {/* Logout */}
+                                        <div style={{ padding: '8px 12px 14px', borderTop: '1px solid rgba(0,0,0,0.04)' }}>
+                                            <motion.button
+                                                whileHover={{ scale: 1.02 }}
+                                                whileTap={{ scale: 0.97 }}
+                                                onClick={() => navigate('/')}
+                                                style={{
+                                                    width: '100%', padding: '11px 0',
+                                                    borderRadius: 14, border: 'none',
+                                                    background: '#fef2f2', color: '#ef4444',
+                                                    fontWeight: 800, fontSize: 11,
+                                                    letterSpacing: '0.1em', textTransform: 'uppercase',
+                                                    cursor: 'pointer', display: 'flex',
+                                                    alignItems: 'center', justifyContent: 'center',
+                                                    gap: 8, transition: 'background 0.2s',
+                                                }}
+                                                onMouseOver={e => e.currentTarget.style.background = '#ef4444'}
+                                                onMouseOut={e => e.currentTarget.style.background = '#fef2f2'}
                                             >
-                                                <div className="flex items-center gap-4">
-                                                    <div className={`w-11 h-11 ${item.bg} ${item.color} rounded-2xl flex items-center justify-center group-hover/item:scale-95 transition-transform`}>
-                                                        <item.icon size={20} strokeWidth={2.5} />
-                                                    </div>
-                                                    <div className="flex flex-col items-start">
-                                                        <span className="text-sm font-bold text-primary leading-none mb-1">{item.label}</span>
-                                                        <span className="text-[10px] font-bold text-textSecondary/30 uppercase tracking-wider">{item.sub}</span>
-                                                    </div>
-                                                </div>
-                                                <ChevronRight size={14} className="text-gray-200 group-hover/item:text-primary group-hover/item:translate-x-1 transition-all" />
-                                            </button>
-                                        ))}
-                                    </div>
-
-                                    {/* Logout Area */}
-                                    <div className="p-4 pt-2 border-t border-gray-50 bg-gray-50/30">
-                                        <button
-                                            onClick={() => navigate('/')}
-                                            className="w-full flex items-center justify-center gap-3 p-4 bg-red-50 text-red-500 rounded-[20px] font-black text-xs uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all shadow-sm active:scale-95"
-                                        >
-                                            <LogOut size={16} strokeWidth={3} />
-                                            Secure Logout
-                                        </button>
-                                    </div>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
+                                                <LogOut size={14} strokeWidth={2.5} />
+                                                Secure Logout
+                                            </motion.button>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </nav>
+            </motion.nav>
+        </>
     );
 };
 
