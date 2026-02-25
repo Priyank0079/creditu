@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Bell,
+    BellRing,
     Settings,
     LogOut,
     ChevronRight,
@@ -93,54 +93,53 @@ const Navbar = () => {
                     50%  { background-position: 100% 50%; }
                     100% { background-position: 0% 50%; }
                 }
-                .nav-gradient-border::after {
-                    content: '';
-                    position: absolute;
-                    bottom: 0;
-                    left: 0;
-                    right: 0;
-                    height: 1.5px;
-                    background: linear-gradient(90deg, #FFCCFF, #FFFF99, #FFCCFF, #FFFF99);
-                    background-size: 300% 100%;
-                    animation: navGradientShift 3s ease infinite;
-                    opacity: 0.8;
+                .nav-glass {
+                    background: rgba(255, 255, 255, 0.8) !important;
+                    backdrop-filter: blur(12px) !important;
+                    -webkit-backdrop-filter: blur(12px) !important;
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
+                }
+                .nav-button-light {
+                    background: rgba(255, 255, 255, 0.9);
+                    border: 1px solid rgba(255, 255, 255, 0.5);
+                    box-shadow: 0 4px 12px rgba(11, 60, 109, 0.05);
                 }
                 .profile-dropdown-glass {
-                    background: var(--card-bg) !important;
+                    background: rgba(248, 250, 252, 0.98) !important;
                     backdrop-filter: blur(24px) !important;
                     -webkit-backdrop-filter: blur(24px) !important;
-                    border: 1px solid var(--border-color) !important;
-                    box-shadow: 0 32px 64px -12px rgba(0, 0, 0, 0.2) !important;
-                    border-radius: 28px !important;
+                    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+                    box-shadow: 0 32px 64px -12px rgba(0, 0, 0, 0.1) !important;
+                    border-radius: 24px !important;
                 }
                 .menu-item-hover:hover {
-                    background: linear-gradient(135deg, rgba(255, 204, 255, 0.12), rgba(255, 255, 153, 0.08)) !important;
+                    background: rgba(248, 250, 252, 0.8) !important;
                     transform: translateX(4px);
                 }
                 .notif-pulse-animation {
                     animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
                 }
                 @keyframes pulse-ring {
-                    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(244, 114, 182, 0.7); }
-                    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(244, 114, 182, 0); }
-                    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(244, 114, 182, 0); }
+                    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+                    70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+                    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
                 }
             `}</style>
 
             <motion.nav
                 animate={{ y: isVisible ? 0 : -90 }}
                 transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-                className={`nav-gradient-border fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${scrolled
-                    ? 'shadow-[0_12px_40px_rgba(11,60,109,0.12)]'
+                className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${scrolled
+                    ? 'shadow-[0_8px_32px_rgba(0,0,0,0.04)] border-b border-white/40'
                     : ''
                     }`}
                 style={{
                     background: scrolled
-                        ? 'var(--nav-scrolled)'
-                        : 'var(--nav-bg)',
-                    backdropFilter: 'blur(20px)',
-                    WebkitBackdropFilter: 'blur(20px)',
-                    borderBottom: '1px solid var(--border-color)'
+                        ? 'rgba(235, 245, 255, 0.98)'
+                        : 'rgba(235, 245, 255, 0.92)',
+                    backdropFilter: 'blur(24px)',
+                    WebkitBackdropFilter: 'blur(24px)',
+                    borderBottom: '1.5px solid rgba(255, 255, 255, 0.6)'
                 }}
             >
                 <div style={{ maxWidth: 1000, margin: '0 auto', padding: '0 24px', height: 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -156,19 +155,19 @@ const Navbar = () => {
                     <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
 
                         <motion.button
-                            whileHover={{ scale: 1.1, rotate: 5 }}
+                            whileHover={{ scale: 1.15, y: -2 }}
                             whileTap={{ scale: 0.9 }}
                             onClick={() => setNotifPulse(false)}
                             style={{
-                                position: 'relative', width: 44, height: 44, borderRadius: 16, border: '1px solid var(--border-color)',
-                                background: 'var(--card-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
-                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', shadow: '0 4px 12px rgba(0,0,0,0.03)'
+                                position: 'relative', width: 48, height: 48, borderRadius: 14, border: 'none',
+                                background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+                                transition: 'all 0.3s ease'
                             }}
                         >
-                            <Bell size={20} color="#0B3C6D" strokeWidth={2.5} />
+                            <BellRing size={24} color="#0B3C6D" strokeWidth={2.4} />
                             {notifPulse && (
                                 <span className="notif-pulse-animation" style={{
-                                    position: 'absolute', top: 12, right: 12, width: 8, height: 8,
+                                    position: 'absolute', top: 12, right: 12, width: 9, height: 9,
                                     borderRadius: '50%', background: '#F472B6', border: '2px solid white'
                                 }} />
                             )}
@@ -178,22 +177,21 @@ const Navbar = () => {
                         <div ref={menuRef} style={{ position: 'relative' }}>
                             <motion.button
                                 onClick={() => setShowProfileMenu(!showProfileMenu)}
-                                whileHover={{ scale: 1.05 }}
+                                whileHover={{ scale: 1.05, y: -1 }}
                                 whileTap={{ scale: 0.95 }}
                                 style={{
-                                    height: 44, padding: '0 6px 0 14px', borderRadius: 16, border: '1px solid var(--border-color)',
-                                    background: 'var(--card-bg)', display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer',
-                                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', shadow: '0 4px 12px rgba(0,0,0,0.03)'
+                                    height: 48, padding: '0 8px', borderRadius: 14, border: 'none',
+                                    background: 'transparent', display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer',
+                                    transition: 'all 0.3s ease'
                                 }}
                             >
-                                <div style={{ textAlign: 'right', display: 'none', md: 'block' }}>
-                                    <p style={{ fontSize: 13, fontWeight: 800, color: 'var(--text-primary)', margin: 0, lineHeight: 1 }}>{user.name.split(' ')[0]}</p>
-                                    <p style={{ fontSize: 9, fontWeight: 700, color: '#10B981', margin: 0, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{user.role.split(' ')[0]}</p>
-                                </div>
-                                <div style={{ width: 32, height: 32, borderRadius: 10, overflow: 'hidden', border: '2px solid white', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+                                <div style={{ width: 34, height: 34, borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
                                     <img src={user.avatar} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                 </div>
-                                <ChevronDown size={14} color="#0B3C6D" style={{ transform: showProfileMenu ? 'rotate(180deg)' : 'none', transition: 'transform 0.4s' }} />
+                                <div style={{ textAlign: 'left', display: 'none', md: 'block' }}>
+                                    <p style={{ fontSize: 13, fontWeight: 800, color: '#0B3C6D', margin: 0, lineHeight: 1 }}>{user.name.split(' ')[0]}</p>
+                                </div>
+                                <ChevronDown size={14} color="#0B3C6D" style={{ transform: showProfileMenu ? 'rotate(180deg)' : 'none', transition: 'transform 0.4s', strokeWidth: 2.5 }} />
                             </motion.button>
 
                             {/* Enhanced Dropdown */}

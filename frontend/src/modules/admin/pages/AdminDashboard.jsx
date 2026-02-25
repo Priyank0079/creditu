@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
     ArrowUpRight, ArrowDownRight, MoreVertical, Eye, Plus, Send,
     UserCheck, MessageSquare, Image, ShieldCheck,
@@ -10,7 +11,7 @@ import {
     XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from 'recharts';
 import {
-    adminStats, loanGrowthData, revenueData, loanDistribution, recentActivity
+    adminStats, loanGrowthData, revenueData, loanDistribution, recentActivity, loansData
 } from '../utils/dummyData';
 
 const iconMap = { Users, FileText, IndianRupee, TrendingUp, Clock };
@@ -101,7 +102,113 @@ const StatCard = ({ stat, index }) => {
 
 const statusColors = { Approved: 'badge-success', Pending: 'badge-warning', Rejected: 'badge-danger' };
 
+const LoanDetailModal = ({ loan, onClose }) => {
+    if (!loan) return null;
+
+    const fullData = loansData.find(l => l.id === loan.id) || loan;
+
+    return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+                position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+                background: 'rgba(10, 44, 90, 0.4)', backdropFilter: 'blur(8px)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                zIndex: 1000, padding: 20
+            }}
+            onClick={onClose}
+        >
+            <motion.div
+                initial={{ scale: 0.9, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                style={{
+                    background: 'white', borderRadius: 24, width: '100%', maxWidth: 500,
+                    overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
+                    border: '1px solid var(--admin-border)'
+                }}
+                onClick={e => e.stopPropagation()}
+            >
+                {/* Header */}
+                <div style={{
+                    padding: '24px 30px', background: 'linear-gradient(135deg, var(--admin-primary) 0%, #1a6fba 100%)',
+                    color: 'white', position: 'relative'
+                }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 15 }}>
+                        <div style={{
+                            width: 50, height: 50, borderRadius: 14, background: 'rgba(255,255,255,0.2)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            fontSize: 18, fontWeight: 900
+                        }}>{fullData.avatar}</div>
+                        <div>
+                            <h2 style={{ margin: 0, fontSize: 20, fontWeight: 800 }}>{fullData.user}</h2>
+                            <span style={{ fontSize: 13, opacity: 0.8 }}>ID: {fullData.id} • {fullData.type}</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Content */}
+                <div style={{ padding: '30px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px 30px', marginBottom: 25 }}>
+                        <div>
+                            <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--admin-text-muted)', textTransform: 'uppercase', marginBottom: 4 }}>Amount</label>
+                            <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--admin-primary)' }}>{typeof fullData.amount === 'number' ? `₹${fullData.amount.toLocaleString()}` : fullData.amount}</div>
+                        </div>
+                        <div>
+                            <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--admin-text-muted)', textTransform: 'uppercase', marginBottom: 4 }}>Status</label>
+                            <span className={`badge ${statusColors[fullData.status]}`} style={{ padding: '4px 12px', fontSize: 12 }}>{fullData.status}</span>
+                        </div>
+                        <div>
+                            <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--admin-text-muted)', textTransform: 'uppercase', marginBottom: 4 }}>Tenure</label>
+                            <div style={{ fontSize: 15, fontWeight: 700 }}>{fullData.tenure || '--'} Months</div>
+                        </div>
+                        <div>
+                            <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--admin-text-muted)', textTransform: 'uppercase', marginBottom: 4 }}>Interest Rate</label>
+                            <div style={{ fontSize: 15, fontWeight: 700 }}>{fullData.interest || '--'}% p.a.</div>
+                        </div>
+                        <div>
+                            <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--admin-text-muted)', textTransform: 'uppercase', marginBottom: 4 }}>Monthly EMI</label>
+                            <div style={{ fontSize: 15, fontWeight: 700 }}>₹{fullData.emi?.toLocaleString() || '--'}</div>
+                        </div>
+                        <div>
+                            <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--admin-text-muted)', textTransform: 'uppercase', marginBottom: 4 }}>Date Applied</label>
+                            <div style={{ fontSize: 15, fontWeight: 700 }}>{fullData.appliedDate || fullData.date}</div>
+                        </div>
+                    </div>
+
+                    <div style={{ background: 'rgba(10,44,90,0.03)', borderRadius: 16, padding: 16, marginBottom: 25 }}>
+                        <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--admin-text-muted)', textTransform: 'uppercase', marginBottom: 8 }}>Purpose of Loan</label>
+                        <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: 'var(--admin-text)', lineHeight: 1.5 }}>
+                            {fullData.purpose || 'Personal financial requirements and emergency expenses.'}
+                        </p>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: 12 }}>
+                        <button
+                            className="admin-btn admin-btn-primary"
+                            style={{ flex: 1, height: 48, borderRadius: 14 }}
+                            onClick={onClose}
+                        >
+                            Review Detailed Documents
+                        </button>
+                        <button
+                            className="admin-btn admin-btn-ghost"
+                            style={{ width: 48, height: 48, borderRadius: 14, padding: 0 }}
+                            onClick={onClose}
+                        >
+                            ✕
+                        </button>
+                    </div>
+                </div>
+            </motion.div>
+        </motion.div>
+    );
+};
+
 const AdminDashboard = () => {
+    const navigate = useNavigate();
+    const [selectedLoan, setSelectedLoan] = useState(null);
     const container = { hidden: {}, show: { transition: { staggerChildren: 0.07 } } };
 
     return (
@@ -132,7 +239,7 @@ const AdminDashboard = () => {
                     <motion.div
                         key={action.label}
                         whileHover={{ y: -4, boxShadow: '0 12px 20px -8px rgba(10,44,90,0.15)' }}
-                        onClick={() => window.location.href = action.path}
+                        onClick={() => navigate(action.path)}
                         style={{
                             background: 'white', borderRadius: 16, padding: '16px 12px', textAlign: 'center',
                             cursor: 'pointer', border: '1.5px solid var(--admin-border)', transition: 'all 0.2s',
@@ -248,7 +355,12 @@ const AdminDashboard = () => {
                         <h3 style={{ margin: 0, fontSize: 15, fontWeight: 800, color: 'var(--admin-text)' }}>Recent Loan Activity</h3>
                         <p style={{ margin: 0, fontSize: 12, color: 'var(--admin-text-muted)' }}>Latest applications and status updates</p>
                     </div>
-                    <button className="admin-btn admin-btn-ghost admin-btn-sm">View All</button>
+                    <button
+                        className="admin-btn admin-btn-ghost admin-btn-sm"
+                        onClick={() => navigate('/dashboard/admin/loans')}
+                    >
+                        View All
+                    </button>
                 </div>
                 <div style={{ overflowX: 'auto' }}>
                     <table className="admin-table">
@@ -284,7 +396,11 @@ const AdminDashboard = () => {
                                     <td><span className={`badge ${statusColors[row.status]}`}>{row.status}</span></td>
                                     <td style={{ fontSize: 12, color: 'var(--admin-text-muted)' }}>{row.date}</td>
                                     <td>
-                                        <button className="admin-btn admin-btn-ghost admin-btn-sm" style={{ gap: 5 }}>
+                                        <button
+                                            className="admin-btn admin-btn-ghost admin-btn-sm"
+                                            style={{ gap: 5 }}
+                                            onClick={() => setSelectedLoan(row)}
+                                        >
                                             <Eye size={13} /> View
                                         </button>
                                     </td>
@@ -294,6 +410,15 @@ const AdminDashboard = () => {
                     </table>
                 </div>
             </motion.div>
+
+            <AnimatePresence>
+                {selectedLoan && (
+                    <LoanDetailModal
+                        loan={selectedLoan}
+                        onClose={() => setSelectedLoan(null)}
+                    />
+                )}
+            </AnimatePresence>
         </div>
     );
 };

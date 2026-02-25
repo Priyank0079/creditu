@@ -203,89 +203,91 @@ const AdminCarousel = () => {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
                             className="admin-modal"
-                            style={{ maxWidth: 550, padding: 0, overflow: 'hidden' }}
+                            style={{ maxWidth: 550, padding: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden', maxHeight: '90vh' }}
                             onClick={e => e.stopPropagation()}
                         >
-                            <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--admin-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--admin-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--admin-bg)', flexShrink: 0 }}>
                                 <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800 }}>{editingSlide ? 'Edit Slide' : 'Add New Slide'}</h3>
                                 <button onClick={closeModal} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--admin-text-muted)' }}><X size={20} /></button>
                             </div>
 
-                            <form onSubmit={handleAddOrUpdate} style={{ padding: 24 }}>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-                                    {/* Image Upload */}
-                                    <div style={{ gridColumn: 'span 2' }}>
-                                        <label style={{ display: 'block', fontSize: 12, fontWeight: 700, marginBottom: 8, color: 'var(--admin-text)' }}>Slide Image</label>
-                                        <div style={{
-                                            width: '100%', height: 160, borderRadius: 16, border: '2px dashed var(--admin-border)',
-                                            background: formData.img ? `url(${formData.img}) center/cover` : 'var(--admin-bg)',
-                                            display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', position: 'relative', overflow: 'hidden'
-                                        }} onClick={() => document.getElementById('img-upload').click()}>
-                                            {!formData.img && (
-                                                <div style={{ textAlign: 'center', color: 'var(--admin-text-muted)' }}>
-                                                    <Upload size={24} style={{ marginBottom: 8 }} />
-                                                    <div style={{ fontSize: 12, fontWeight: 600 }}>Click to upload image</div>
-                                                </div>
-                                            )}
-                                            {formData.img && (
-                                                <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.3)', opacity: 0, transition: '0.2s' }} className="hover-overlay-upload">
-                                                    <Upload size={24} color="white" />
-                                                </div>
-                                            )}
-                                            <input type="file" id="img-upload" hidden accept="image/*" onChange={handleImageUpload} />
+                            <form onSubmit={handleAddOrUpdate} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+                                <div style={{ padding: 24, overflowY: 'auto', flex: 1 }} className="admin-scrollbar">
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+                                        {/* Image Upload */}
+                                        <div style={{ gridColumn: 'span 2' }}>
+                                            <label style={{ display: 'block', fontSize: 12, fontWeight: 700, marginBottom: 8, color: 'var(--admin-text)' }}>Slide Image</label>
+                                            <div style={{
+                                                width: '100%', height: 160, borderRadius: 16, border: '2px dashed var(--admin-border)',
+                                                background: formData.img ? `url(${formData.img}) center/cover` : 'var(--admin-bg)',
+                                                display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', position: 'relative', overflow: 'hidden'
+                                            }} onClick={() => document.getElementById('img-upload').click()}>
+                                                {!formData.img && (
+                                                    <div style={{ textAlign: 'center', color: 'var(--admin-text-muted)' }}>
+                                                        <Upload size={24} style={{ marginBottom: 8 }} />
+                                                        <div style={{ fontSize: 12, fontWeight: 600 }}>Click to upload image</div>
+                                                    </div>
+                                                )}
+                                                {formData.img && (
+                                                    <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.3)', opacity: 0, transition: '0.2s' }} className="hover-overlay-upload">
+                                                        <Upload size={24} color="white" />
+                                                    </div>
+                                                )}
+                                                <input type="file" id="img-upload" hidden accept="image/*" onChange={handleImageUpload} />
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    {/* Tag & Tech details */}
-                                    <div>
-                                        <label style={{ display: 'block', fontSize: 12, fontWeight: 700, marginBottom: 8, color: 'var(--admin-text)' }}>Tag (e.g. Personal Loan)</label>
-                                        <div style={{ position: 'relative' }}>
-                                            <ImageIcon size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--admin-text-muted)' }} />
-                                            <input className="admin-input" style={{ paddingLeft: 38 }} value={formData.tag} onChange={e => setFormData({ ...formData, tag: e.target.value })} placeholder="Tag text" required />
+                                        {/* Tag & Tech details */}
+                                        <div>
+                                            <label style={{ display: 'block', fontSize: 12, fontWeight: 700, marginBottom: 8, color: 'var(--admin-text)' }}>Tag (e.g. Personal Loan)</label>
+                                            <div style={{ position: 'relative' }}>
+                                                <ImageIcon size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--admin-text-muted)' }} />
+                                                <input className="admin-input" style={{ paddingLeft: 38 }} value={formData.tag} onChange={e => setFormData({ ...formData, tag: e.target.value })} placeholder="Tag text" required />
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div>
-                                        <label style={{ display: 'block', fontSize: 12, fontWeight: 700, marginBottom: 8, color: 'var(--admin-text)' }}>CTA (e.g. Apply Now)</label>
-                                        <div style={{ position: 'relative' }}>
-                                            <Plus size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--admin-text-muted)' }} />
-                                            <input className="admin-input" style={{ paddingLeft: 38 }} value={formData.cta} onChange={e => setFormData({ ...formData, cta: e.target.value })} placeholder="Button text" required />
+                                        <div>
+                                            <label style={{ display: 'block', fontSize: 12, fontWeight: 700, marginBottom: 8, color: 'var(--admin-text)' }}>CTA (e.g. Apply Now)</label>
+                                            <div style={{ position: 'relative' }}>
+                                                <Plus size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--admin-text-muted)' }} />
+                                                <input className="admin-input" style={{ paddingLeft: 38 }} value={formData.cta} onChange={e => setFormData({ ...formData, cta: e.target.value })} placeholder="Button text" required />
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    {/* Headline & Sub */}
-                                    <div style={{ gridColumn: 'span 2' }}>
-                                        <label style={{ display: 'block', fontSize: 12, fontWeight: 700, marginBottom: 8, color: 'var(--admin-text)' }}>Headline</label>
-                                        <div style={{ position: 'relative' }}>
-                                            <Type size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--admin-text-muted)' }} />
-                                            <input className="admin-input" style={{ paddingLeft: 38 }} value={formData.headline || formData.title} onChange={e => setFormData({ ...formData, headline: e.target.value, title: e.target.value })} placeholder="Main headline" required />
+                                        {/* Headline & Sub */}
+                                        <div style={{ gridColumn: 'span 2' }}>
+                                            <label style={{ display: 'block', fontSize: 12, fontWeight: 700, marginBottom: 8, color: 'var(--admin-text)' }}>Headline</label>
+                                            <div style={{ position: 'relative' }}>
+                                                <Type size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--admin-text-muted)' }} />
+                                                <input className="admin-input" style={{ paddingLeft: 38 }} value={formData.headline || formData.title} onChange={e => setFormData({ ...formData, headline: e.target.value, title: e.target.value })} placeholder="Main headline" required />
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div style={{ gridColumn: 'span 2' }}>
-                                        <label style={{ display: 'block', fontSize: 12, fontWeight: 700, marginBottom: 8, color: 'var(--admin-text)' }}>Subtitle</label>
-                                        <div style={{ position: 'relative' }}>
-                                            <Subtitles size={14} style={{ position: 'absolute', left: 12, top: 14, color: 'var(--admin-text-muted)' }} />
-                                            <textarea className="admin-input" style={{ paddingLeft: 38, minHeight: 80, resize: 'none' }} value={formData.sub || formData.subtitle} onChange={e => setFormData({ ...formData, sub: e.target.value, subtitle: e.target.value })} placeholder="Brief description..." required />
+                                        <div style={{ gridColumn: 'span 2' }}>
+                                            <label style={{ display: 'block', fontSize: 12, fontWeight: 700, marginBottom: 8, color: 'var(--admin-text)' }}>Subtitle</label>
+                                            <div style={{ position: 'relative' }}>
+                                                <Subtitles size={14} style={{ position: 'absolute', left: 12, top: 14, color: 'var(--admin-text-muted)' }} />
+                                                <textarea className="admin-input" style={{ paddingLeft: 38, minHeight: 80, resize: 'none' }} value={formData.sub || formData.subtitle} onChange={e => setFormData({ ...formData, sub: e.target.value, subtitle: e.target.value })} placeholder="Brief description..." required />
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    {/* Redirect URL & Order */}
-                                    <div>
-                                        <label style={{ display: 'block', fontSize: 12, fontWeight: 700, marginBottom: 8, color: 'var(--admin-text)' }}>Redirect URL (Optional)</label>
-                                        <div style={{ position: 'relative' }}>
-                                            <LinkIcon size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--admin-text-muted)' }} />
-                                            <input className="admin-input" style={{ paddingLeft: 38 }} value={formData.redirectUrl} onChange={e => setFormData({ ...formData, redirectUrl: e.target.value })} placeholder="https://..." />
+                                        {/* Redirect URL & Order */}
+                                        <div>
+                                            <label style={{ display: 'block', fontSize: 12, fontWeight: 700, marginBottom: 8, color: 'var(--admin-text)' }}>Redirect URL (Optional)</label>
+                                            <div style={{ position: 'relative' }}>
+                                                <LinkIcon size={14} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--admin-text-muted)' }} />
+                                                <input className="admin-input" style={{ paddingLeft: 38 }} value={formData.redirectUrl} onChange={e => setFormData({ ...formData, redirectUrl: e.target.value })} placeholder="https://..." />
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div>
-                                        <label style={{ display: 'block', fontSize: 12, fontWeight: 700, marginBottom: 8, color: 'var(--admin-text)' }}>Display Order</label>
-                                        <input type="number" className="admin-input" value={formData.order} onChange={e => setFormData({ ...formData, order: parseInt(e.target.value) || 0 })} />
+                                        <div>
+                                            <label style={{ display: 'block', fontSize: 12, fontWeight: 700, marginBottom: 8, color: 'var(--admin-text)' }}>Display Order</label>
+                                            <input type="number" className="admin-input" value={formData.order} onChange={e => setFormData({ ...formData, order: parseInt(e.target.value) || 0 })} />
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div style={{ marginTop: 30, display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
+                                <div style={{ padding: '16px 24px', borderTop: '1px solid var(--admin-border)', display: 'flex', gap: 12, justifyContent: 'flex-end', background: 'var(--admin-bg)', flexShrink: 0 }}>
                                     <button type="button" className="admin-btn admin-btn-ghost" onClick={closeModal}>Cancel</button>
                                     <button type="submit" className="admin-btn admin-btn-primary" style={{ padding: '10px 30px' }}>
                                         <Save size={18} /> {editingSlide ? 'Update Slide' : 'Save Slide'}
