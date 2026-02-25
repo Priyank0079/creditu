@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Filter, Download, Eye, ShieldX, Trash2, X, Phone, Mail, MapPin, CreditCard, Calendar, IndianRupee, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { Search, Filter, Download, Eye, ShieldX, Trash2, X, Phone, Mail, MapPin, CreditCard, Calendar, IndianRupee, CheckCircle, XCircle, Clock, RefreshCw } from 'lucide-react';
 import { usersData } from '../utils/dummyData';
 
 const kycColors = { Verified: 'badge-success', Pending: 'badge-warning', Rejected: 'badge-danger' };
@@ -25,7 +25,7 @@ const CreditScoreRing = ({ score }) => {
     );
 };
 
-const UserDrawer = ({ user, onClose }) => (
+const UserDrawer = ({ user, onClose, onToggleBlock }) => (
     <AnimatePresence>
         {user && (
             <>
@@ -98,11 +98,24 @@ const UserDrawer = ({ user, onClose }) => (
 
                     {/* Actions */}
                     <div style={{ padding: '16px 24px', borderTop: '1px solid var(--admin-border)', display: 'flex', gap: 12 }}>
-                        <button className="admin-btn admin-btn-danger" style={{ flex: 1, justifyContent: 'center', gap: 8 }}>
-                            <ShieldX size={15} /> Block User
+                        <button
+                            className="admin-btn admin-btn-danger"
+                            style={{ flex: 1, justifyContent: 'center', gap: 8 }}
+                            onClick={() => onToggleBlock(user.id)}
+                        >
+                            <ShieldX size={15} /> {user.accountStatus === 'Active' ? 'Block User' : 'Unblock User'}
                         </button>
                         <button className="admin-btn admin-btn-primary" style={{ flex: 1, justifyContent: 'center' }}>
                             Send Message
+                        </button>
+                    </div>
+                    <div style={{ padding: '0 24px 20px' }}>
+                        <button
+                            className="admin-btn admin-btn-ghost"
+                            style={{ width: '100%', justifyContent: 'center', gap: 8, border: '1.5px dashed var(--admin-border)' }}
+                            onClick={() => alert(`Recalculating credit score for ${user.name}...`)}
+                        >
+                            <RefreshCw size={14} /> Recalculate Credit Score
                         </button>
                     </div>
                 </motion.div>
@@ -112,11 +125,37 @@ const UserDrawer = ({ user, onClose }) => (
 );
 
 const AdminUsers = () => {
+    const [users, setUsers] = useState(usersData);
     const [search, setSearch] = useState('');
     const [filterStatus, setFilterStatus] = useState('All');
     const [selectedUser, setSelectedUser] = useState(null);
 
-    const filtered = usersData.filter(u => {
+    const handleToggleBlock = (userId) => {
+        setUsers(prev => prev.map(u =>
+            u.id === userId
+                ? { ...u, accountStatus: u.accountStatus === 'Active' ? 'Blocked' : 'Active' }
+                : u
+        ));
+
+        // Update selectedUser if it's currently open in the drawer
+        if (selectedUser && selectedUser.id === userId) {
+            setSelectedUser(prev => ({
+                ...prev,
+                accountStatus: prev.accountStatus === 'Active' ? 'Blocked' : 'Active'
+            }));
+        }
+    };
+
+    const handleDeleteUser = (userId) => {
+        if (window.confirm('Are you sure you want to permanently delete this user?')) {
+            setUsers(prev => prev.filter(u => u.id !== userId));
+            if (selectedUser && selectedUser.id === userId) {
+                setSelectedUser(null);
+            }
+        }
+    };
+
+    const filtered = users.filter(u => {
         const matchSearch = u.name.toLowerCase().includes(search.toLowerCase()) ||
             u.email.toLowerCase().includes(search.toLowerCase()) ||
             u.phone.includes(search);
@@ -209,10 +248,20 @@ const AdminUsers = () => {
                                             <button className="admin-btn admin-btn-ghost admin-btn-sm" onClick={() => setSelectedUser(user)}>
                                                 <Eye size={13} />
                                             </button>
-                                            <button className="admin-btn admin-btn-danger admin-btn-sm">
+                                            <button
+                                                className="admin-btn admin-btn-danger admin-btn-sm"
+                                                onClick={() => handleToggleBlock(user.id)}
+                                                style={{ opacity: user.accountStatus === 'Blocked' ? 0.5 : 1 }}
+                                                title={user.accountStatus === 'Active' ? 'Block User' : 'Unblock User'}
+                                            >
                                                 <ShieldX size={13} />
                                             </button>
-                                            <button className="admin-btn admin-btn-sm" style={{ background: '#fee2e2', color: '#dc2626', padding: '6px 10px' }}>
+                                            <button
+                                                className="admin-btn admin-btn-sm"
+                                                style={{ background: '#fee2e2', color: '#dc2626', padding: '6px 10px' }}
+                                                onClick={() => handleDeleteUser(user.id)}
+                                                title="Delete User"
+                                            >
                                                 <Trash2 size={13} />
                                             </button>
                                         </div>
@@ -224,7 +273,12 @@ const AdminUsers = () => {
                 </div>
             </motion.div>
 
-            <UserDrawer user={selectedUser} onClose={() => setSelectedUser(null)} />
+            {/* Drawer */}
+            <UserDrawer
+                user={selectedUser}
+                onClose={() => setSelectedUser(null)}
+                onToggleBlock={handleToggleBlock}
+            />
         </div>
     );
 };

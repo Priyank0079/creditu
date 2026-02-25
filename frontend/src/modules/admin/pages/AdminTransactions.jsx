@@ -1,16 +1,121 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Download, Filter, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import { transactionsData } from '../utils/dummyData';
 
 const statusColors = { Success: 'badge-success', Failed: 'badge-danger', Pending: 'badge-warning' };
 const typeColors = { 'EMI Payment': 'badge-info', 'Disbursement': 'badge-purple' };
 
+const ReceiptModal = ({ txn, onClose }) => {
+    if (!txn) return null;
+
+    const handlePrint = () => {
+        window.print();
+    };
+
+    return (
+        <AnimatePresence>
+            <div className="admin-modal-overlay" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={onClose}>
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                    onClick={e => e.stopPropagation()}
+                    style={{
+                        width: '420px',
+                        background: 'white',
+                        borderRadius: 24,
+                        overflow: 'hidden',
+                        boxShadow: '0 25px 50px -12px rgba(10,44,90,0.25)',
+                        position: 'relative'
+                    }}
+                >
+                    {/* Header Decorative */}
+                    <div style={{ height: 8, background: 'linear-gradient(90deg, #F4A100, #0A2C5A)' }} />
+
+                    <div style={{ padding: '32px 32px 24px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 30 }}>
+                            <div>
+                                <h3 style={{ margin: 0, fontSize: 18, fontWeight: 900, color: '#0A2C5A', letterSpacing: '-0.01em' }}>Transaction Receipt</h3>
+                                <p style={{ margin: '4px 0 0', fontSize: 11, fontWeight: 700, color: 'var(--admin-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                    Receipt No: <span style={{ color: '#0A2C5A' }}>TXN-{txn.id.split('-').pop()}</span>
+                                </p>
+                            </div>
+                            <div style={{ textAlign: 'right' }}>
+                                <div style={{ fontSize: 16, fontWeight: 900, color: '#0A2C5A', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 4 }}>
+                                    Credit<span style={{ color: '#F4A100' }}>u</span>
+                                </div>
+                                <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--admin-text-muted)' }}>{txn.date}</div>
+                            </div>
+                        </div>
+
+                        {/* Customer Info */}
+                        <div style={{ background: '#F8F9FC', borderRadius: 16, padding: 16, marginBottom: 24 }}>
+                            <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--admin-text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>Billed To</div>
+                            <div style={{ fontWeight: 800, fontSize: 14, color: '#0A2C5A' }}>{txn.user}</div>
+                            <div style={{ fontSize: 12, color: 'var(--admin-text-muted)', fontWeight: 500 }}>Customer ID: {txn.loanId}</div>
+                        </div>
+
+                        {/* Details Table */}
+                        <div style={{ marginBottom: 24 }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1.5px solid #F1F3F9' }}>
+                                <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--admin-text-muted)' }}>Transaction Type</span>
+                                <span style={{ fontSize: 13, fontWeight: 700, color: '#0A2C5A' }}>{txn.type}</span>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1.5px solid #F1F3F9' }}>
+                                <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--admin-text-muted)' }}>Payment Mode</span>
+                                <span style={{ fontSize: 13, fontWeight: 700, color: '#0A2C5A' }}>{txn.mode}</span>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '2px solid #0A2C5A' }}>
+                                <span style={{ fontSize: 13, fontWeight: 800, color: '#0A2C5A' }}>Total Amount</span>
+                                <span style={{ fontSize: 18, fontWeight: 900, color: '#0A2C5A' }}>{txn.amount}</span>
+                            </div>
+                        </div>
+
+                        {/* Status Stamp */}
+                        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 30 }}>
+                            <div style={{
+                                padding: '6px 16px',
+                                borderRadius: 100,
+                                border: `2px solid ${txn.status === 'Success' ? '#00A651' : txn.status === 'Failed' ? '#ef4444' : '#F4A100'}`,
+                                color: txn.status === 'Success' ? '#00A651' : txn.status === 'Failed' ? '#ef4444' : '#F4A100',
+                                fontSize: 11,
+                                fontWeight: 900,
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.1em',
+                                transform: 'rotate(-5deg)',
+                                boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
+                            }}>
+                                {txn.status}
+                            </div>
+                        </div>
+
+                        <div style={{ textAlign: 'center' }}>
+                            <p style={{ fontSize: 11, color: 'var(--admin-text-muted)', fontWeight: 600, margin: 0 }}>This is a computer-generated receipt.</p>
+                        </div>
+                    </div>
+
+                    {/* Footer Actions */}
+                    <div style={{ padding: '20px 32px 32px', display: 'flex', gap: 12 }}>
+                        <button className="admin-btn admin-btn-ghost" onClick={handlePrint} style={{ flex: 1, justifyContent: 'center', padding: '12px', borderRadius: 12 }}>
+                            Print Receipt
+                        </button>
+                        <button className="admin-btn admin-btn-primary" onClick={onClose} style={{ flex: 1, justifyContent: 'center', padding: '12px', borderRadius: 12 }}>
+                            Close
+                        </button>
+                    </div>
+                </motion.div>
+            </div>
+        </AnimatePresence>
+    );
+};
+
 const AdminTransactions = () => {
     const [search, setSearch] = useState('');
     const [filterStatus, setFilterStatus] = useState('All');
     const [dateFrom, setDateFrom] = useState('');
     const [dateTo, setDateTo] = useState('');
+    const [selectedTxn, setSelectedTxn] = useState(null);
 
     const filtered = transactionsData.filter(t => {
         const matchSearch = t.user.toLowerCase().includes(search.toLowerCase()) || t.id.includes(search);
@@ -114,7 +219,7 @@ const AdminTransactions = () => {
                                     <td><span className={`badge ${statusColors[txn.status]}`}>{txn.status}</span></td>
                                     <td style={{ fontSize: 12, color: 'var(--admin-text-muted)' }}>{txn.date}</td>
                                     <td>
-                                        <button className="admin-btn admin-btn-ghost admin-btn-sm" style={{ fontSize: 11 }}>
+                                        <button className="admin-btn admin-btn-ghost admin-btn-sm" style={{ fontSize: 11 }} onClick={() => setSelectedTxn(txn)}>
                                             Receipt
                                         </button>
                                     </td>
@@ -124,6 +229,13 @@ const AdminTransactions = () => {
                     </table>
                 </div>
             </motion.div>
+
+            {/* Receipt Modal */}
+            <AnimatePresence>
+                {selectedTxn && (
+                    <ReceiptModal txn={selectedTxn} onClose={() => setSelectedTxn(null)} />
+                )}
+            </AnimatePresence>
         </div>
     );
 };

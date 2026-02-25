@@ -7,7 +7,7 @@ import { ChevronRight, CheckCircle2, Clock, Zap, Lock } from 'lucide-react';
 ───────────────────────────────────────────── */
 const STATUS_CONFIG = {
   Completed: {
-    cardBg: 'linear-gradient(145deg, #ffffff 0%, #f0faf4 100%)',
+    cardBg: 'var(--card-bg)',
     border: 'rgba(0,166,81,0.18)',
     hoverBorder: 'rgba(0,166,81,0.45)',
     hoverShadow: '0 16px 48px rgba(0,166,81,0.14)',
@@ -21,7 +21,7 @@ const STATUS_CONFIG = {
     badgeIcon: CheckCircle2,
   },
   Action: {
-    cardBg: 'linear-gradient(145deg, #fffdf5 0%, #fff8e6 100%)',
+    cardBg: 'var(--card-bg)',
     border: 'rgba(244,161,0,0.22)',
     hoverBorder: 'rgba(244,161,0,0.5)',
     hoverShadow: '0 16px 48px rgba(244,161,0,0.16)',
@@ -35,7 +35,7 @@ const STATUS_CONFIG = {
     badgeIcon: Zap,
   },
   Pending: {
-    cardBg: 'linear-gradient(145deg, #ffffff 0%, #f5f9ff 100%)',
+    cardBg: 'var(--card-bg)',
     border: 'rgba(10,44,90,0.1)',
     hoverBorder: 'rgba(10,44,90,0.28)',
     hoverShadow: '0 16px 48px rgba(10,44,90,0.1)',
@@ -51,7 +51,7 @@ const STATUS_CONFIG = {
 };
 
 const DISABLED_CONFIG = {
-  cardBg: 'linear-gradient(145deg, #fdf8ff 0%, #f3eeff 100%)',
+  cardBg: 'var(--card-bg)',
   border: 'rgba(109,40,217,0.15)',
   hoverBorder: 'rgba(109,40,217,0.3)',
   hoverShadow: '0 16px 48px rgba(109,40,217,0.12)',
@@ -187,18 +187,18 @@ const CategoryCard = ({ icon: Icon, title, status, count, disabled = false }) =>
       <div style={{ position: 'relative', zIndex: 1 }}>
         <h4 style={{
           fontSize: 13, fontWeight: 750, margin: '0 0 4px 0',
-          color: disabled ? '#5B21B6' : '#0A2C5A',
+          color: disabled ? '#5B21B6' : 'var(--text-primary)',
           letterSpacing: '-0.01em', lineHeight: 1.25,
           fontFamily: "'Inter', 'Poppins', sans-serif",
         }}>{title}</h4>
 
         {count && (
-          <p style={{ fontSize: 11, fontWeight: 500, color: '#7B8DB0', margin: 0 }}>
+          <p style={{ fontSize: 11, fontWeight: 500, color: 'var(--text-secondary)', margin: 0 }}>
             {count} available
           </p>
         )}
         {!count && !disabled && (
-          <p style={{ fontSize: 11, fontWeight: 500, color: '#7B8DB0', margin: 0 }}>
+          <p style={{ fontSize: 11, fontWeight: 500, color: 'var(--text-secondary)', margin: 0 }}>
             {status === 'Completed' ? 'View details' : status === 'Action' ? 'Action required' : 'Not started'}
           </p>
         )}

@@ -22,6 +22,10 @@ import AdminCreditScore from '../modules/admin/pages/AdminCreditScore';
 import AdminReports from '../modules/admin/pages/AdminReports';
 import AdminNotifications from '../modules/admin/pages/AdminNotifications';
 import AdminSettings from '../modules/admin/pages/AdminSettings';
+import AdminCarousel from '../modules/admin/pages/AdminCarousel';
+import AdminKYC from '../modules/admin/pages/AdminKYC';
+import AdminSupport from '../modules/admin/pages/AdminSupport';
+import AdminLoanOffers from '../modules/admin/pages/AdminLoanOffers';
 
 const AppRoutes = () => {
     return (
@@ -39,7 +43,7 @@ const AppRoutes = () => {
             <Route path="/status/approved" element={<LoanApproved />} />
 
             {/* ── Admin Panel Routes ───────────────────────── */}
-            <Route path="/admin" element={<AdminLayout />}>
+            <Route path="/dashboard/admin" element={<AdminLayout />}>
                 <Route index element={<AdminDashboard />} />
                 <Route path="users" element={<AdminUsers />} />
                 <Route path="loans" element={<AdminLoans />} />
@@ -49,6 +53,10 @@ const AppRoutes = () => {
                 <Route path="reports" element={<AdminReports />} />
                 <Route path="notifications" element={<AdminNotifications />} />
                 <Route path="settings" element={<AdminSettings />} />
+                <Route path="carousel" element={<AdminCarousel />} />
+                <Route path="kyc" element={<AdminKYC />} />
+                <Route path="support" element={<AdminSupport />} />
+                <Route path="offers" element={<AdminLoanOffers />} />
             </Route>
         </Routes>
     );

@@ -2,21 +2,25 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
-    LayoutDashboard, Users, FileText, ArrowLeftRight, Calendar,
     CreditCard, BarChart2, Bell, Settings, LogOut, ChevronLeft,
-    ChevronRight, Menu, Shield
+    ChevronRight, Menu, Shield, Image, UserCheck, MessageSquare,
+    LayoutDashboard, Users, FileText, ArrowLeftRight, Calendar, LayoutGrid
 } from 'lucide-react';
 
 const navItems = [
-    { icon: LayoutDashboard, label: 'Dashboard', path: '/admin' },
-    { icon: Users, label: 'Users', path: '/admin/users' },
-    { icon: FileText, label: 'Loans', path: '/admin/loans' },
-    { icon: ArrowLeftRight, label: 'Transactions', path: '/admin/transactions' },
-    { icon: Calendar, label: 'EMI Management', path: '/admin/emi' },
-    { icon: CreditCard, label: 'Credit Score', path: '/admin/credit' },
-    { icon: BarChart2, label: 'Reports', path: '/admin/reports' },
-    { icon: Bell, label: 'Notifications', path: '/admin/notifications' },
-    { icon: Settings, label: 'Settings', path: '/admin/settings' },
+    { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard/admin' },
+    { icon: Image, label: 'Carousel Management', path: '/dashboard/admin/carousel' },
+    { icon: LayoutGrid, label: 'Featured Offers', path: '/dashboard/admin/offers' },
+    { icon: Users, label: 'Users', path: '/dashboard/admin/users' },
+    { icon: UserCheck, label: 'KYC Verification', path: '/dashboard/admin/kyc' },
+    { icon: FileText, label: 'Loans', path: '/dashboard/admin/loans' },
+    { icon: MessageSquare, label: 'Support Tickets', path: '/dashboard/admin/support' },
+    { icon: ArrowLeftRight, label: 'Transactions', path: '/dashboard/admin/transactions' },
+    { icon: Calendar, label: 'EMI Management', path: '/dashboard/admin/emi' },
+    { icon: CreditCard, label: 'Credit Score', path: '/dashboard/admin/credit' },
+    { icon: BarChart2, label: 'Reports', path: '/dashboard/admin/reports' },
+    { icon: Bell, label: 'Notifications', path: '/dashboard/admin/notifications' },
+    { icon: Settings, label: 'Settings', path: '/dashboard/admin/settings' },
 ];
 
 const AdminSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) => {
@@ -25,11 +29,12 @@ const AdminSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) =>
 
     const handleLogout = () => {
         if (setMobileOpen) setMobileOpen(false);
+        sessionStorage.removeItem('adminAuth');
         navigate('/');
     };
 
     const isActive = (path) => {
-        if (path === '/admin') return location.pathname === '/admin';
+        if (path === '/dashboard/admin') return location.pathname === '/dashboard/admin' || location.pathname === '/dashboard/admin/';
         return location.pathname.startsWith(path);
     };
 
@@ -67,24 +72,78 @@ const AdminSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) =>
                         minHeight: 72,
                     }}
                 >
-                    <Link to="/admin" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', overflow: 'hidden' }}>
+                    <Link to="/dashboard/admin" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', overflow: 'hidden' }}>
                         {/* Logo Icon */}
+                        {/* Logo Image */}
+                        {/* Logo Wrapper with Animated Effects */}
                         <div style={{
-                            width: 38,
-                            height: 38,
-                            borderRadius: 10,
-                            background: 'linear-gradient(135deg, #00A651 0%, #F4A100 50%, #0A2C5A 100%)',
+                            position: 'relative',
+                            height: 48,
+                            width: collapsed ? 48 : 140,
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             flexShrink: 0,
-                            fontSize: 18,
-                            fontWeight: 900,
-                            color: 'white',
-                            fontFamily: 'Inter, sans-serif',
-                            boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
                         }}>
-                            ₹
+                            {/* 1. Pulsing Background Glow */}
+                            <motion.div
+                                animate={{ scale: [1, 1.25, 1], opacity: [0.1, 0.25, 0.1] }}
+                                transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
+                                style={{
+                                    position: 'absolute',
+                                    width: collapsed ? 44 : 130,
+                                    height: 38,
+                                    borderRadius: '50%',
+                                    background: 'rgba(255,255,255,0.6)',
+                                    filter: 'blur(15px)',
+                                    pointerEvents: 'none'
+                                }}
+                            />
+
+                            {/* 2. Spinning Conic Ring */}
+                            <motion.div
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+                                style={{
+                                    position: 'absolute',
+                                    width: collapsed ? 50 : 136,
+                                    height: 42,
+                                    borderRadius: 24,
+                                    background: 'conic-gradient(from 0deg, transparent 55%, rgba(255,255,255,0.4) 78%, transparent 100%)',
+                                    filter: 'blur(2px)',
+                                    pointerEvents: 'none'
+                                }}
+                            />
+
+                            {/* 3. Pulsing Subtle Border */}
+                            <motion.div
+                                animate={{ scale: [0.96, 1.04, 0.96], opacity: [0.2, 0.4, 0.2] }}
+                                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                                style={{
+                                    position: 'absolute',
+                                    width: collapsed ? 46 : 132,
+                                    height: 40,
+                                    borderRadius: 20,
+                                    border: '1.2px solid rgba(255,255,255,0.5)',
+                                    pointerEvents: 'none'
+                                }}
+                            />
+
+                            {/* Logo Image */}
+                            <motion.img
+                                src="/images/image.png"
+                                alt="Creditu"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                style={{
+                                    height: '65%',
+                                    width: 'auto',
+                                    objectFit: 'contain',
+                                    position: 'relative',
+                                    zIndex: 2,
+                                    filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.6))'
+                                }}
+                            />
                         </div>
                         <AnimatePresence>
                             {!collapsed && (
@@ -95,10 +154,7 @@ const AdminSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) =>
                                     transition={{ duration: 0.2 }}
                                     style={{ overflow: 'hidden', whiteSpace: 'nowrap' }}
                                 >
-                                    <div style={{ color: 'white', fontWeight: 800, fontSize: 15, letterSpacing: '-0.02em', lineHeight: 1.1 }}>
-                                        Creditu
-                                    </div>
-                                    <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                                    <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: 2 }}>
                                         Admin Panel
                                     </div>
                                 </motion.div>

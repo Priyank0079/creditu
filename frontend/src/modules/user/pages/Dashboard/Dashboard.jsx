@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -16,38 +16,26 @@ import LoanCard from '../../components/loan/LoanCard.jsx';
 import ProgressCard from '../../components/loan/LoanProgressCard.jsx';
 import CategoryCard from '../../components/loan/LoanCategoryCard.jsx';
 import HeroCarousel from '../../components/loan/HeroCarousel.jsx';
+import { featuredLoansData } from '../../../admin/utils/dummyData';
 
 const Dashboard = () => {
     const navigate = useNavigate();
+    const [loanOffers, setLoanOffers] = useState([]);
 
-    const loanOffers = [
-        {
-            id: 1,
-            type: 'Personal Loan',
-            amount: '5,00,000',
-            rate: '9.3',
-            gradient: 'blue',
-            description: 'Apply now for instant approval and lowest interest rates.'
-        },
-        {
-            id: 2,
-            type: 'Medical Loan',
-            amount: '10,00,000',
-            rate: '10.5',
-            gradient: 'gold',
-            comingSoon: true,
-            description: 'Emergency funding for your health needs. Launching soon!'
-        },
-        {
-            id: 3,
-            type: 'Career Loan',
-            amount: '15,00,000',
-            rate: '8.5',
-            gradient: 'green',
-            comingSoon: true,
-            description: 'Invest in your future skills and education.'
-        },
-    ];
+    useEffect(() => {
+        const fetchOffers = () => {
+            const stored = localStorage.getItem('loanOffersData');
+            if (stored) {
+                setLoanOffers(JSON.parse(stored).filter(o => o.status !== 'Disabled'));
+            } else {
+                setLoanOffers(featuredLoansData);
+            }
+        };
+
+        fetchOffers();
+        window.addEventListener('storage', fetchOffers);
+        return () => window.removeEventListener('storage', fetchOffers);
+    }, []);
 
     const categories = [
         { id: 1, icon: FileCheck, title: 'Eligibility Check', status: 'Completed', path: '/status' },
@@ -60,6 +48,12 @@ const Dashboard = () => {
 
     const handleApply = () => {
         navigate('/eligibility');
+    };
+
+    const categoriesRef = useRef(null);
+
+    const scrollToCategories = () => {
+        categoriesRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
     return (
@@ -85,7 +79,7 @@ const Dashboard = () => {
                     <div
                         onClick={() => navigate('/status')}
                         className="flex items-center gap-3 p-2 rounded-2xl border border-[rgba(11,60,109,0.12)] cursor-pointer hover:border-gold/50 transition-all hover:shadow-md"
-                        style={{ background: 'linear-gradient(135deg, rgba(232,240,251,0.9) 0%, rgba(237,232,248,0.9) 50%, rgba(254,249,240,0.9) 100%)', backdropFilter: 'blur(8px)' }}
+                        style={{ background: 'var(--card-bg)', backdropFilter: 'blur(8px)' }}
                     >
                         <div className="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center text-gold">
                             <TrendingUp size={20} />
@@ -103,13 +97,18 @@ const Dashboard = () => {
                         <h2 className="text-xl font-bold text-primary flex items-center gap-2">
                             <CreditCard size={22} className="text-gold" /> Featured Loan Offers
                         </h2>
-                        <button className="text-xs font-bold text-gold uppercase tracking-widest hover:underline">View All</button>
+                        <button
+                            onClick={scrollToCategories}
+                            className="text-xs font-bold text-gold uppercase tracking-widest hover:underline"
+                        >
+                            View All
+                        </button>
                     </div>
 
                     <div className="flex overflow-x-auto gap-8 pb-10 -mx-4 px-4 snap-x no-scrollbar">
                         {loanOffers.map((offer) => (
                             <div key={offer.id} className="snap-center">
-                                <LoanCard {...offer} onApply={handleApply} />
+                                <LoanCard {...offer} comingSoon={offer.status === 'Coming Soon'} onApply={handleApply} />
                             </div>
                         ))}
                     </div>
@@ -121,7 +120,7 @@ const Dashboard = () => {
                 </section>
 
                 {/* Categories Grid */}
-                <section className="mb-12">
+                <section ref={categoriesRef} className="mb-12 pt-4">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
                             <div style={{ width: 4, height: 26, borderRadius: 4, background: 'linear-gradient(180deg,#F4A100,#FFD166)', boxShadow: '0 0 10px rgba(244,161,0,0.3)', flexShrink: 0 }} />
@@ -152,10 +151,10 @@ const Dashboard = () => {
                 <section
                     className="rounded-[32px] p-8 border relative overflow-hidden"
                     style={{
-                        background: 'linear-gradient(135deg, rgba(232,240,251,0.85) 0%, rgba(237,232,248,0.85) 30%, rgba(245,239,254,0.85) 60%, rgba(254,245,224,0.85) 100%)',
-                        borderColor: 'rgba(11,60,109,0.10)',
+                        background: 'var(--card-bg)',
+                        borderColor: 'var(--border-color)',
                         backdropFilter: 'blur(12px)',
-                        boxShadow: '0 4px 32px rgba(11,60,109,0.07), inset 0 1px 0 rgba(255,255,255,0.6)',
+                        boxShadow: '0 4px 32px rgba(0,0,0,0.05)',
                     }}
                 >
                     {/* Decorative blobs */}

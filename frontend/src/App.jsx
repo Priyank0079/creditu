@@ -4,7 +4,7 @@ import AppRoutes from './routes/AppRoutes'
 
 function App() {
     return (
-        <BrowserRouter>
+        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <div className="min-h-screen bg-background text-textPrimary">
                 <AppRoutes />
             </div>

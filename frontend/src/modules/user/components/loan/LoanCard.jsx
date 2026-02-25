@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { CreditCard, ArrowUpRight, Zap, Lock, Info } from 'lucide-react';
 import gsap from 'gsap';
 
-const LoanCard = ({ type, rate, amount, gradient = 'blue', comingSoon = false, description, onApply }) => {
+const LoanCard = ({ type, rate, amount, gradient = 'blue', comingSoon = false, isBlank = false, description, onApply }) => {
   const cardRef = useRef(null);
   const glowRef = useRef(null);
 
@@ -11,11 +11,19 @@ const LoanCard = ({ type, rate, amount, gradient = 'blue', comingSoon = false, d
     blue: 'bg-gradient-to-br from-[#0B3C6D] via-[#082d52] to-[#041629]',
     gold: 'bg-gradient-to-br from-[#F4B400] via-[#c99500] to-[#8a6a00]',
     green: 'bg-gradient-to-br from-[#1FAF5A] via-[#168a47] to-[#0b4d27]',
+    purple: 'bg-gradient-to-br from-[#7c3aed] via-[#6d28d9] to-[#4c1d95]',
+    red: 'bg-gradient-to-br from-[#ef4444] via-[#dc2626] to-[#991b1b]',
+    orange: 'bg-gradient-to-br from-[#f97316] via-[#ea580c] to-[#9a3412]',
+    pink: 'bg-gradient-to-br from-[#ec4899] via-[#db2777] to-[#831843]',
+    indigo: 'bg-gradient-to-br from-[#4f46e5] via-[#4338ca] to-[#312e81]',
+    teal: 'bg-gradient-to-br from-[#0d9488] via-[#0891b2] to-[#155e75]',
+    slate: 'bg-gradient-to-br from-[#1e293b] via-[#0f172a] to-[#020617]',
+    blank: 'bg-gradient-to-br from-gray-200/50 to-gray-300/30 border-2 border-dashed border-gray-400/20',
   };
 
   useEffect(() => {
     const card = cardRef.current;
-    if (!card || comingSoon) return;
+    if (!card || comingSoon || isBlank) return;
 
     const handleMouseMove = (e) => {
       const { left, top, width, height } = card.getBoundingClientRect();
@@ -65,7 +73,20 @@ const LoanCard = ({ type, rate, amount, gradient = 'blue', comingSoon = false, d
       card.removeEventListener('mousemove', handleMouseMove);
       card.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, [comingSoon]);
+  }, [comingSoon, isBlank]);
+
+  if (isBlank) {
+    return (
+      <div className="perspective-1000">
+        <div className="relative w-[340px] h-[210px] rounded-[24px] p-6 text-white/40 shadow-xl overflow-hidden bg-gradient-to-br from-white/5 to-white/10 border-2 border-dashed border-black/5 backdrop-blur-sm flex flex-col items-center justify-center gap-3">
+          <div className="w-12 h-12 rounded-full bg-black/5 flex items-center justify-center">
+            <CreditCard size={24} className="opacity-20" />
+          </div>
+          <p className="text-[10px] font-bold uppercase tracking-[2px] opacity-30">More Offers Coming</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="perspective-1000">

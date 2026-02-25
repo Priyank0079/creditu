@@ -7,7 +7,10 @@ const AdminSettings = () => {
     const [showPass, setShowPass] = useState(false);
     const [showNewPass, setShowNewPass] = useState(false);
     const [saved, setSaved] = useState(false);
-    const [form, setForm] = useState({
+    const [error, setError] = useState('');
+    const [uploading, setUploading] = useState(false);
+
+    const initialForm = {
         name: 'Super Admin',
         email: 'admin@creditu.in',
         phone: '+91 98765 00000',
@@ -19,11 +22,37 @@ const AdminSettings = () => {
         notifKYC: true,
         notifReports: false,
         themeColor: '#0A2C5A',
-    });
+    };
+
+    const [form, setForm] = useState(initialForm);
+
+    const handleReset = () => {
+        if (window.confirm('Reset all changes to default?')) {
+            setForm(initialForm);
+            setError('');
+        }
+    };
 
     const handleSave = () => {
+        setError('');
+
+        // Basic Validation for Security
+        if (tab === 'security') {
+            if (!form.currentPass) return setError('Current password is required');
+            if (form.newPass !== form.confirmPass) return setError('New passwords do not match');
+            if (form.newPass.length < 6) return setError('Password must be at least 6 characters');
+        }
+
         setSaved(true);
         setTimeout(() => setSaved(false), 2500);
+    };
+
+    const handleLogoChange = () => {
+        setUploading(true);
+        setTimeout(() => {
+            setUploading(false);
+            alert('Admin avatar updated successfully!');
+        }, 1500);
     };
 
     const tabs = [
@@ -44,7 +73,7 @@ const AdminSettings = () => {
                 {/* Sidebar Tabs */}
                 <motion.div initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} className="admin-card" style={{ padding: 12 }}>
                     {tabs.map(t => (
-                        <button key={t.id} onClick={() => setTab(t.id)}
+                        <button key={t.id} onClick={() => { setTab(t.id); setError(''); }}
                             style={{
                                 width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px',
                                 borderRadius: 11, border: 'none', cursor: 'pointer', marginBottom: 4,
@@ -64,20 +93,32 @@ const AdminSettings = () => {
                 {/* Content */}
                 <motion.div key={tab} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="admin-card" style={{ padding: 28 }}>
 
+                    {error && (
+                        <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}
+                            style={{ padding: '12px 16px', borderRadius: 10, background: '#fef2f2', border: '1px solid #fee2e2', color: '#dc2626', fontSize: 13, fontWeight: 700, marginBottom: 24, display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <div style={{ padding: 4, background: '#dc262620', borderRadius: '50%' }}><Lock size={12} /></div>
+                            {error}
+                        </motion.div>
+                    )}
+
                     {/* Profile Tab */}
                     {tab === 'profile' && (
                         <div>
                             <h3 style={{ margin: '0 0 24px', fontSize: 16, fontWeight: 800, color: 'var(--admin-text)' }}>Admin Profile</h3>
-                            {/* Avatar */}
                             <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 28, padding: 20, background: 'var(--admin-bg)', borderRadius: 16 }}>
                                 <div style={{ width: 70, height: 70, borderRadius: 18, background: 'linear-gradient(135deg, var(--admin-primary), #1a6fba)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: 24, fontWeight: 900, boxShadow: '0 8px 24px rgba(10,44,90,0.22)' }}>
                                     SA
                                 </div>
                                 <div>
-                                    <h4 style={{ margin: '0 0 4px', fontSize: 18, fontWeight: 800, color: 'var(--admin-text)' }}>Super Admin</h4>
-                                    <p style={{ margin: 0, fontSize: 12, color: 'var(--admin-text-muted)' }}>admin@creditu.in • Full Access</p>
-                                    <button className="admin-btn admin-btn-ghost admin-btn-sm" style={{ marginTop: 10, gap: 6 }}>
-                                        Change Logo
+                                    <h4 style={{ margin: '0 0 4px', fontSize: 18, fontWeight: 800, color: 'var(--admin-text)' }}>{form.name}</h4>
+                                    <p style={{ margin: 0, fontSize: 12, color: 'var(--admin-text-muted)' }}>{form.email} • Full Access</p>
+                                    <button
+                                        className="admin-btn admin-btn-ghost admin-btn-sm"
+                                        style={{ marginTop: 10, gap: 6 }}
+                                        onClick={handleLogoChange}
+                                        disabled={uploading}
+                                    >
+                                        {uploading ? 'Uploading...' : 'Change Avatar'}
                                     </button>
                                 </div>
                             </div>
@@ -123,7 +164,6 @@ const AdminSettings = () => {
                                     </div>
                                 ))}
                             </div>
-                            {/* Password strength info */}
                             {form.newPass && (
                                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                                     style={{ marginTop: 16, padding: 16, background: 'var(--admin-bg)', borderRadius: 12 }}>
@@ -147,15 +187,16 @@ const AdminSettings = () => {
                                     { key: 'notifKYC', label: 'KYC Submissions', desc: 'Notify on new KYC document uploads' },
                                     { key: 'notifReports', label: 'Daily Reports', desc: 'Receive daily summary report at 9 AM' },
                                 ].map(item => (
-                                    <div key={item.key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', background: 'var(--admin-bg)', borderRadius: 14 }}>
+                                    <div key={item.key}
+                                        onClick={() => setForm(f => ({ ...f, [item.key]: !f[item.key] }))}
+                                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', background: 'var(--admin-bg)', borderRadius: 14, cursor: 'pointer' }}>
                                         <div>
                                             <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--admin-text)', marginBottom: 3 }}>{item.label}</div>
                                             <div style={{ fontSize: 12, color: 'var(--admin-text-muted)' }}>{item.desc}</div>
                                         </div>
                                         <div
-                                            onClick={() => setForm(f => ({ ...f, [item.key]: !f[item.key] }))}
                                             style={{
-                                                width: 46, height: 26, borderRadius: 13, cursor: 'pointer',
+                                                width: 46, height: 26, borderRadius: 13,
                                                 background: form[item.key] ? 'var(--admin-green)' : '#d0dae8',
                                                 position: 'relative', transition: 'background 0.25s', flexShrink: 0,
                                             }}
@@ -184,29 +225,27 @@ const AdminSettings = () => {
                                             style={{ width: 44, height: 44, borderRadius: 10, border: '2px solid var(--admin-border)', cursor: 'pointer', padding: 2 }} />
                                         <div>
                                             <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--admin-text)' }}>Primary Brand Color</div>
-                                            <div style={{ fontSize: 12, color: 'var(--admin-text-muted)' }}>Current: {form.themeColor} (Future ready)</div>
+                                            <div style={{ fontSize: 12, color: 'var(--admin-text-muted)' }}>Apply theme color globally</div>
                                         </div>
                                     </div>
                                 </div>
                                 {[
                                     { label: 'Application Version', value: 'v2.1.4' },
                                     { label: 'Environment', value: 'Production' },
-                                    { label: 'API Base URL', value: 'https://api.creditu.in/v2' },
-                                    { label: 'Database Region', value: 'Asia South (Mumbai)' },
                                     { label: 'Last Backup', value: '24 Feb 2026, 3:00 AM' },
                                 ].map(item => (
                                     <div key={item.label} style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 20px', background: 'var(--admin-bg)', borderRadius: 12 }}>
                                         <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--admin-text-muted)' }}>{item.label}</span>
-                                        <span style={{ fontSize: 13, fontWeight: 800, color: 'var(--admin-text)', fontFamily: item.label === 'API Base URL' ? 'monospace' : 'inherit' }}>{item.value}</span>
+                                        <span style={{ fontSize: 13, fontWeight: 800, color: 'var(--admin-text)' }}>{item.value}</span>
                                     </div>
                                 ))}
                             </div>
                         </div>
                     )}
 
-                    {/* Save Button */}
-                    <div style={{ marginTop: 28, display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
-                        <button className="admin-btn admin-btn-ghost">Reset</button>
+                    {/* Footer Actions */}
+                    <div style={{ marginTop: 28, paddingTop: 24, borderTop: '1px solid var(--admin-border)', display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
+                        <button className="admin-btn admin-btn-ghost" onClick={handleReset}>Reset to Default</button>
                         <motion.button
                             whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
                             className="admin-btn admin-btn-primary"

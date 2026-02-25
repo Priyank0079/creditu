@@ -29,6 +29,7 @@ const KYCVerification = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [showSelfieCamera, setShowSelfieCamera] = useState(false);
+  const [verificationSuccess, setVerificationSuccess] = useState(false);
 
   // File handling
   const handleFileUpload = (e) => {
@@ -55,25 +56,45 @@ const KYCVerification = () => {
 
   const handleSelfie = () => {
     setShowSelfieCamera(true);
+    // Simulation of face detection then auto-capture
     setTimeout(() => {
+      const shutter = new Audio('https://www.soundjay.com/misc/camera-shutter-click-01.mp3');
+      shutter.play().catch(() => { }); // Ignore if blocked by browser
+
       setShowSelfieCamera(false);
       const selfieDoc = {
         id: 'selfie-' + Date.now(),
-        name: 'Live_Selfie.jpg',
-        size: '0.8 MB',
+        name: 'Live_Selfie_' + new Date().getHours() + new Date().getMinutes() + '.jpg',
+        size: '0.82 MB',
         type: 'image/jpeg',
         isSelfie: true
       };
       setUploadedFiles(prev => [...prev, selfieDoc]);
-    }, 2000);
+    }, 3500);
   };
 
   const handleFinalSubmit = () => {
     if (!pan || !income || !accountNumber || uploadedFiles.length === 0) {
-      alert("Please complete all fields and upload documents");
+      alert("Please complete all required fields: PAN, Income, Account Number, and Documents (including Selfie).");
       return;
     }
-    navigate('/dashboard');
+
+    // Check if selfie is included
+    const hasSelfie = uploadedFiles.some(f => f.isSelfie);
+    if (!hasSelfie) {
+      alert("Please capture a Live Selfie to continue.");
+      return;
+    }
+
+    setUploading(true);
+    // Simulate final verification
+    setTimeout(() => {
+      setUploading(false);
+      setVerificationSuccess(true);
+      setTimeout(() => {
+        navigate('/status');
+      }, 2000);
+    }, 2000);
   };
 
   return (
@@ -264,12 +285,23 @@ const KYCVerification = () => {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={handleFinalSubmit}
-          className="w-full bg-[#1A1D1F] text-white py-5 rounded-[28px] font-black text-base shadow-2xl shadow-black/20 flex items-center justify-center gap-3 group"
+          disabled={uploading}
+          className={`w-full py-5 rounded-[28px] font-black text-base shadow-2xl flex items-center justify-center gap-3 group transition-all ${uploading ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#1A1D1F] text-white shadow-black/20'
+            }`}
         >
-          Proceed to Eligibility
-          <div className="p-1 bg-white/10 rounded-lg group-hover:translate-x-1 transition-transform">
-            <ChevronRight size={18} />
-          </div>
+          {uploading ? (
+            <>
+              <Loader2 className="animate-spin" size={20} />
+              Finalizing Verification...
+            </>
+          ) : (
+            <>
+              Submit for Approval
+              <div className="p-1 bg-white/10 rounded-lg group-hover:translate-x-1 transition-transform">
+                <ChevronRight size={18} />
+              </div>
+            </>
+          )}
         </motion.button>
 
         <p className="text-center text-[10px] font-bold text-textSecondary uppercase tracking-[0.2em] opacity-40">
@@ -296,6 +328,28 @@ const KYCVerification = () => {
             <h2 className="text-white text-xl font-bold mb-2">Scanning Face...</h2>
             <p className="text-white/40 text-sm">Keep your head inside the circle</p>
             <Loader2 className="text-gold animate-spin mt-10" size={32} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* Verification Success Overlay */}
+      <AnimatePresence>
+        {verificationSuccess && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[300] bg-trust flex flex-col items-center justify-center p-8 text-center"
+          >
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", damping: 10, stiffness: 100 }}
+              className="w-24 h-24 bg-white rounded-full flex items-center justify-center text-trust mb-8 shadow-xl"
+            >
+              <CheckCircle2 size={48} />
+            </motion.div>
+            <h2 className="text-white text-3xl font-black mb-4">KYC Submitted!</h2>
+            <p className="text-white/80 text-lg font-medium">Your documents are being verified by our secure pipeline. Please wait...</p>
           </motion.div>
         )}
       </AnimatePresence>

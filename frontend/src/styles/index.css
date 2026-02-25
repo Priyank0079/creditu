@@ -3,29 +3,35 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --bg-gradient: linear-gradient(180deg, #e8f0fb 0%, #ede8f8 20%, #f5effe 38%, #fbf5ff 55%, #fef9f0 75%, #fff8e8 90%, #fef5e0 100%);
+    --text-primary: #0B3C6D;
+    --text-secondary: #64748B;
+    --card-bg: rgba(255, 255, 255, 0.7);
+    --nav-bg: rgba(255, 255, 255, 0.4);
+    --nav-scrolled: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.92) 100%);
+    --border-color: rgba(11, 60, 109, 0.08);
+  }
+
+  .dark {
+    --bg-gradient: linear-gradient(180deg, #020617 0%, #0f172a 30%, #1e1b4b 60%, #0f172a 100%);
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+    --card-bg: rgba(15, 23, 42, 0.7);
+    --nav-bg: rgba(15, 23, 42, 0.4);
+    --nav-scrolled: linear-gradient(135deg, rgba(2, 6, 23, 0.95) 0%, rgba(15, 23, 42, 0.92) 100%);
+    --border-color: rgba(248, 250, 252, 0.1);
+  }
+
   body {
-    @apply text-textPrimary antialiased;
+    @apply antialiased;
     margin: 0;
     font-family: 'Inter', sans-serif;
-    /* Premium top→bottom gradient background — theme colors */
-    background: linear-gradient(180deg,
-        #e8f0fb 0%,
-        /* light primary blue (top) */
-        #ede8f8 20%,
-        /* soft violet transition */
-        #f5effe 38%,
-        /* light purple mid */
-        #fbf5ff 55%,
-        /* near-white lavender */
-        #fef9f0 75%,
-        /* warm gold tint */
-        #fff8e8 90%,
-        /* soft gold lower */
-        #fef5e0 100%
-        /* warm cream (bottom) */
-      );
+    background: var(--bg-gradient);
+    color: var(--text-primary);
     min-height: 100vh;
     background-attachment: fixed;
+    transition: background 0.3s ease, color 0.3s ease;
   }
 }
 

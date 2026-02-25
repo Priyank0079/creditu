@@ -118,11 +118,11 @@ const ProgressCard = ({ percentage = 35 }) => {
         transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
         style={{
           position: 'relative', zIndex: 1,
-          background: 'linear-gradient(145deg, #ffffff 0%, #F5F9FF 60%, #EEF4FF 100%)',
+          background: 'var(--card-bg)',
           borderRadius: 24,
           padding: '32px',
-          boxShadow: '0 8px 48px rgba(10,44,90,0.1), 0 1px 0 rgba(255,255,255,0.8) inset',
-          border: '1px solid rgba(10,44,90,0.07)',
+          boxShadow: '0 8px 48px rgba(0,0,0,0.1)',
+          border: '1px solid var(--border-color)',
           backdropFilter: 'blur(4px)',
           overflow: 'hidden',
         }}
@@ -148,13 +148,13 @@ const ProgressCard = ({ percentage = 35 }) => {
                 flexShrink: 0,
               }} />
               <h3 style={{
-                fontSize: 22, fontWeight: 800, color: '#0A2C5A',
+                fontSize: 22, fontWeight: 800, color: 'var(--text-primary)',
                 letterSpacing: '-0.03em', fontFamily: "'Inter', 'Poppins', sans-serif",
                 margin: 0,
               }}>Loan Progress</h3>
             </div>
             <p style={{
-              fontSize: 10, fontWeight: 600, color: '#7B8DB0',
+              fontSize: 10, fontWeight: 600, color: 'var(--text-secondary)',
               letterSpacing: '0.16em', textTransform: 'uppercase', marginLeft: 14,
             }}>REF: #CRU-7429</p>
           </div>
@@ -310,15 +310,15 @@ const ProgressCard = ({ percentage = 35 }) => {
             const isLocked = step.locked;
 
             /* Per-step styles */
-            const cardBg = isCompleted ? 'linear-gradient(135deg, rgba(0,166,81,0.07) 0%, rgba(0,166,81,0.04) 100%)'
-              : isActive ? 'linear-gradient(135deg, rgba(10,44,90,0.06) 0%, rgba(244,161,0,0.05) 100%)'
-                : 'rgba(245,249,255,0.6)';
+            const cardBg = isCompleted ? 'rgba(0,166,81,0.07)'
+              : isActive ? 'rgba(244,161,0,0.06)'
+                : 'var(--card-bg)';
             const borderCol = isCompleted ? 'rgba(0,166,81,0.18)'
-              : isActive ? 'rgba(10,44,90,0.14)'
-                : 'rgba(10,44,90,0.06)';
+              : isActive ? 'rgba(244,161,0,0.22)'
+                : 'var(--border-color)';
             const iconBg = isCompleted ? 'linear-gradient(135deg, #00A651, #00c874)'
               : isActive ? 'linear-gradient(135deg, #0A2C5A, #0d3870)'
-                : '#EEF4FF';
+                : 'var(--border-color)';
             const iconColor = isLocked ? '#B0C0D8' : 'white';
             const iconShadow = isCompleted ? '0 4px 14px rgba(0,166,81,0.3)'
               : isActive ? '0 4px 14px rgba(10,44,90,0.3)'
@@ -390,7 +390,7 @@ const ProgressCard = ({ percentage = 35 }) => {
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
                     <h4 style={{
                       fontSize: 14, fontWeight: 700, margin: 0,
-                      color: isLocked ? '#B0C0D8' : '#0A2C5A',
+                      color: isLocked ? '#B0C0D8' : 'var(--text-primary)',
                       letterSpacing: '-0.02em',
                     }}>{step.label}</h4>
                     {isActive && (
@@ -410,7 +410,7 @@ const ProgressCard = ({ percentage = 35 }) => {
                   </div>
                   <p style={{
                     fontSize: 12, fontWeight: 500, margin: 0,
-                    color: isLocked ? '#C5D2E0' : '#7B8DB0',
+                    color: isLocked ? '#C5D2E0' : 'var(--text-secondary)',
                     letterSpacing: '0.01em',
                   }}>{step.description}</p>
                 </div>
@@ -442,8 +442,8 @@ const ProgressCard = ({ percentage = 35 }) => {
                 <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#00A651', position: 'relative', zIndex: 1 }} />
               </div>
               <div>
-                <p style={{ fontSize: 9, fontWeight: 800, color: '#7B8DB0', textTransform: 'uppercase', letterSpacing: '0.16em', margin: 0 }}>Status</p>
-                <p style={{ fontSize: 13, fontWeight: 700, color: '#0A2C5A', margin: 0, letterSpacing: '-0.01em' }}>System Under Review</p>
+                <p style={{ fontSize: 9, fontWeight: 800, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.16em', margin: 0 }}>Status</p>
+                <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', margin: 0, letterSpacing: '-0.01em' }}>System Under Review</p>
               </div>
             </div>
 
@@ -458,8 +458,8 @@ const ProgressCard = ({ percentage = 35 }) => {
               }}
             >
               <div>
-                <p style={{ fontSize: 9, fontWeight: 800, color: '#7B8DB0', textTransform: 'uppercase', letterSpacing: '0.16em', margin: 0 }}>Progress</p>
-                <p style={{ fontSize: 13, fontWeight: 700, color: '#0A2C5A', margin: 0 }}>
+                <p style={{ fontSize: 9, fontWeight: 800, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.16em', margin: 0 }}>Progress</p>
+                <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
                   Step 2 <span style={{ color: '#B0C0D8', margin: '0 4px' }}>/</span> 5
                 </p>
               </div>

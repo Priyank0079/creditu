@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 
-/* ─── Slide data: real Unsplash photos with overlay content ──── */
-const SLIDES = [
+/* ─── Default seed data if localStorage is empty ──── */
+const DEFAULT_SLIDES = [
     {
-        id: 0,
+        id: 'default-0',
         img: 'https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?w=1200&q=80&fit=crop',
         tag: 'Personal Loan',
         headline: 'Achieve Your Dreams',
@@ -15,9 +15,11 @@ const SLIDES = [
         overlayTo: 'rgba(11,60,109,0.10)',
         tagBg: 'rgba(255,204,255,0.22)',
         tagColor: '#FFCCFF',
+        order: 0,
+        isActive: true,
     },
     {
-        id: 1,
+        id: 'default-1',
         img: 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&q=80&fit=crop',
         tag: 'Instant Approval',
         headline: 'Money in 60 Seconds',
@@ -27,9 +29,11 @@ const SLIDES = [
         overlayTo: 'rgba(34,6,64,0.10)',
         tagBg: 'rgba(255,255,153,0.20)',
         tagColor: '#FFFF99',
+        order: 1,
+        isActive: true,
     },
     {
-        id: 2,
+        id: 'default-2',
         img: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&q=80&fit=crop',
         tag: 'Best Rates',
         headline: 'Lowest Interest Rates',
@@ -39,6 +43,8 @@ const SLIDES = [
         overlayTo: 'rgba(6,78,59,0.10)',
         tagBg: 'rgba(255,255,153,0.20)',
         tagColor: '#FFFF99',
+        order: 2,
+        isActive: true,
     },
 ];
 
@@ -66,28 +72,73 @@ const swipePower = (offset, velocity) => {
     return Math.abs(offset) * velocity;
 };
 
+const CarouselSkeleton = () => (
+    <div style={{ width: '100%', height: 240, background: '#0B3C6D', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 24px', gap: 12 }}>
+        <div className="skeleton" style={{ width: 100, height: 18, borderRadius: 100 }} />
+        <div className="skeleton" style={{ width: '70%', height: 32, borderRadius: 8 }} />
+        <div className="skeleton" style={{ width: '50%', height: 20, borderRadius: 8 }} />
+        <div className="skeleton" style={{ width: 140, height: 40, borderRadius: 14, marginTop: 10 }} />
+    </div>
+);
+
 /* ─── Component ─────────────────────────────────────────────── */
 const HeroCarousel = ({ onCtaClick }) => {
+    const [slides, setSlides] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [current, setCurrent] = useState(0);
     const [dir, setDir] = useState(1);
     const [paused, setPaused] = useState(false);
     const timerRef = useRef(null);
 
-    const goTo = useCallback((idx, direction) => {
-        setDir(direction);
-        setCurrent(((idx % SLIDES.length) + SLIDES.length) % SLIDES.length);
+    // Initial load and seed
+    useEffect(() => {
+        const loadSlides = () => {
+            const stored = localStorage.getItem('carouselData');
+            let data = [];
+            if (!stored) {
+                data = DEFAULT_SLIDES;
+                localStorage.setItem('carouselData', JSON.stringify(data));
+            } else {
+                try {
+                    data = JSON.parse(stored);
+                } catch (e) {
+                    data = DEFAULT_SLIDES;
+                }
+            }
+
+            const activeSlides = data
+                .filter(s => s.isActive)
+                .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+            setSlides(activeSlides);
+            setTimeout(() => setLoading(false), 800); // Small delay for smooth feel
+        };
+
+        loadSlides();
+        // Listen for local storage changes (if admin updates it in another tab/component)
+        window.addEventListener('storage', loadSlides);
+        return () => window.removeEventListener('storage', loadSlides);
     }, []);
+
+    const goTo = useCallback((idx, direction) => {
+        if (slides.length === 0) return;
+        setDir(direction);
+        setCurrent(((idx % slides.length) + slides.length) % slides.length);
+    }, [slides.length]);
 
     const next = useCallback(() => goTo(current + 1, 1), [current, goTo]);
     const prev = useCallback(() => goTo(current - 1, -1), [current, goTo]);
 
     useEffect(() => {
-        if (paused) return;
-        timerRef.current = setInterval(next, 1000);
+        if (paused || loading || slides.length === 0) return;
+        timerRef.current = setInterval(next, 4000); // 4s interval
         return () => clearInterval(timerRef.current);
-    }, [paused, next]);
+    }, [paused, next, loading, slides.length]);
 
-    const slide = SLIDES[current];
+    if (loading) return <CarouselSkeleton />;
+    if (slides.length === 0) return null;
+
+    const slide = slides[current];
 
     return (
         <div
@@ -96,11 +147,11 @@ const HeroCarousel = ({ onCtaClick }) => {
             style={{
                 position: 'relative',
                 width: '100%',
-                height: 240, // Slightly taller for full-screen impact
+                height: 240,
                 overflow: 'hidden',
-                borderRadius: 0, // Edge-to-edge full width
+                borderRadius: 0,
                 background: '#0B3C6D',
-                touchAction: 'pan-y', // Allow vertical scroll but capture horizontal swipe
+                touchAction: 'pan-y',
             }}
         >
             {/* ── Slides */}
@@ -141,22 +192,22 @@ const HeroCarousel = ({ onCtaClick }) => {
                             objectFit: 'cover',
                             objectPosition: 'center',
                             display: 'block',
-                            pointerEvents: 'none', // Prevent image dragging from interfering
+                            pointerEvents: 'none',
                         }}
                         loading="lazy"
                     />
 
-                    {/* Gradient overlay — left-to-right dark to transparent */}
+                    {/* Gradient overlay */}
                     <div
                         style={{
                             position: 'absolute',
                             inset: 0,
-                            background: `linear-gradient(90deg, ${slide.overlayFrom} 0%, ${slide.overlayTo} 100%)`,
+                            background: `linear-gradient(90deg, ${slide.overlayFrom || 'rgba(11,60,109,0.72)'} 0%, ${slide.overlayTo || 'rgba(11,60,109,0.10)'} 100%)`,
                             pointerEvents: 'none',
                         }}
                     />
 
-                    {/* Slight bottom vignette for dots legibility */}
+                    {/* Slight bottom vignette */}
                     <div
                         style={{
                             position: 'absolute',
@@ -189,13 +240,13 @@ const HeroCarousel = ({ onCtaClick }) => {
                             style={{
                                 display: 'inline-block',
                                 alignSelf: 'flex-start',
-                                background: slide.tagBg,
-                                border: `1px solid ${slide.tagColor}55`,
+                                background: slide.tagBg || 'rgba(255,204,255,0.22)',
+                                border: `1px solid ${slide.tagColor || '#FFCCFF'}55`,
                                 borderRadius: 100,
                                 padding: '3px 10px',
                                 fontSize: 9,
                                 fontWeight: 800,
-                                color: slide.tagColor,
+                                color: slide.tagColor || '#FFCCFF',
                                 textTransform: 'uppercase',
                                 letterSpacing: '0.12em',
                                 backdropFilter: 'blur(6px)',
@@ -210,7 +261,7 @@ const HeroCarousel = ({ onCtaClick }) => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.17, duration: 0.4 }}
                             style={{
-                                fontSize: 26, // Slightly larger headline
+                                fontSize: 26,
                                 fontWeight: 900,
                                 color: 'white',
                                 margin: 0,
@@ -228,7 +279,7 @@ const HeroCarousel = ({ onCtaClick }) => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.24, duration: 0.4 }}
                             style={{
-                                fontSize: 13, // Slightly larger sub
+                                fontSize: 13,
                                 fontWeight: 500,
                                 color: 'rgba(255,255,255,0.85)',
                                 margin: 0,
@@ -246,7 +297,13 @@ const HeroCarousel = ({ onCtaClick }) => {
                                 transition={{ delay: 0.30, duration: 0.4 }}
                                 whileHover={{ scale: 1.05, x: 2 }}
                                 whileTap={{ scale: 0.96 }}
-                                onClick={onCtaClick}
+                                onClick={() => {
+                                    if (slide.redirectUrl) {
+                                        window.location.href = slide.redirectUrl;
+                                    } else if (onCtaClick) {
+                                        onCtaClick();
+                                    }
+                                }}
                                 style={{
                                     alignSelf: 'flex-start',
                                     display: 'flex',
@@ -265,7 +322,7 @@ const HeroCarousel = ({ onCtaClick }) => {
                                     boxShadow: '0 4px 16px rgba(255,100,200,0.30)',
                                 }}
                             >
-                                {slide.cta}
+                                {slide.cta || 'Learn More'}
                                 <ArrowRight size={14} strokeWidth={2.8} />
                             </motion.button>
                         </div>
@@ -286,7 +343,7 @@ const HeroCarousel = ({ onCtaClick }) => {
                     alignItems: 'center',
                 }}
             >
-                {SLIDES.map((_, i) => (
+                {slides.map((_, i) => (
                     <motion.button
                         key={i}
                         onClick={() => goTo(i, i > current ? 1 : -1)}

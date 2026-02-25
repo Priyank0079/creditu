@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
-    Users, FileText, IndianRupee, TrendingUp, Clock,
-    ArrowUpRight, ArrowDownRight, MoreVertical, Eye
+    ArrowUpRight, ArrowDownRight, MoreVertical, Eye, Plus, Send,
+    UserCheck, MessageSquare, Image, ShieldCheck,
+    Users, FileText, IndianRupee, TrendingUp, Clock
 } from 'lucide-react';
 import {
     LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
@@ -114,6 +115,37 @@ const AdminDashboard = () => {
                     Here's what's happening with Creditu today — 24 Feb 2026
                 </motion.p>
             </div>
+
+            {/* Quick Actions Grid */}
+            <motion.div
+                initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+                style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 14, marginBottom: 28 }}
+            >
+                {[
+                    { label: 'Verify KYC', icon: UserCheck, color: 'var(--admin-primary)', path: '/dashboard/admin/kyc' },
+                    { label: 'Disburse Loan', icon: IndianRupee, color: 'var(--admin-green)', path: '/dashboard/admin/loans' },
+                    { label: 'Support Reply', icon: MessageSquare, color: 'var(--admin-gold)', path: '/dashboard/admin/support' },
+                    { label: 'Send Alert', icon: Send, color: '#7c3aed', path: '/dashboard/admin/notifications' },
+                    { label: 'Add Banner', icon: Image, color: '#ec4899', path: '/dashboard/admin/carousel' },
+                    { label: 'Admin Settings', icon: ShieldCheck, color: '#64748b', path: '/dashboard/admin/settings' },
+                ].map((action, i) => (
+                    <motion.div
+                        key={action.label}
+                        whileHover={{ y: -4, boxShadow: '0 12px 20px -8px rgba(10,44,90,0.15)' }}
+                        onClick={() => window.location.href = action.path}
+                        style={{
+                            background: 'white', borderRadius: 16, padding: '16px 12px', textAlign: 'center',
+                            cursor: 'pointer', border: '1.5px solid var(--admin-border)', transition: 'all 0.2s',
+                            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10
+                        }}
+                    >
+                        <div style={{ width: 42, height: 42, borderRadius: 12, background: `${action.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <action.icon size={20} style={{ color: action.color }} />
+                        </div>
+                        <span style={{ fontSize: 13, fontWeight: 800, color: 'var(--admin-text)' }}>{action.label}</span>
+                    </motion.div>
+                ))}
+            </motion.div>
 
             {/* Stats Grid */}
             <motion.div

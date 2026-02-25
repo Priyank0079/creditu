@@ -251,3 +251,47 @@ export const monthlyReport = [
     { month: 'January', disbursed: 96, revenue: 55, users: 13800, loans: 1920, npa: 1.5 },
     { month: 'February', disbursed: 112, revenue: 62, users: 18400, loans: 2240, npa: 1.2 },
 ];
+
+export const kycData = [
+    { id: 'KYC-501', userId: 'U-10002', name: 'Rahul Gupta', avatar: 'RG', type: 'PAN + Aadhaar', status: 'Pending', date: '22 Feb 2026', documents: ['PAN Card', 'Aadhaar Card'], city: 'Delhi' },
+    { id: 'KYC-502', userId: 'U-10004', name: 'Karan Singh', avatar: 'KS', type: 'Income Proof', status: 'Rejected', date: '15 Feb 2026', documents: ['Salary Slip'], city: 'Pune', reason: 'Document is blurry' },
+    { id: 'KYC-503', userId: 'U-10009', name: 'Zoya Khan', avatar: 'ZK', type: 'PAN Card', status: 'Pending', date: '24 Feb 2026', documents: ['PAN Card'], city: 'Lucknow' },
+    { id: 'KYC-504', userId: 'U-10001', name: 'Priya Sharma', avatar: 'PS', type: 'Full KYC', status: 'Verified', date: '12 Jan 2026', documents: ['PAN Card', 'Aadhaar Card', 'Voter ID'], city: 'Mumbai' },
+];
+
+export const supportTickets = [
+    { id: 'TKT-101', userId: 'U-10001', name: 'Priya Sharma', avatar: 'PS', subject: 'Loan Disbursement Delay', category: 'Loan', status: 'Open', priority: 'High', date: '24 Feb 2026', lastMsg: 'I haven\'t received the amount yet.' },
+    { id: 'TKT-102', userId: 'U-10003', name: 'Ananya Verma', avatar: 'AV', subject: 'KYC Verification Pending', category: 'Account', status: 'In Progress', priority: 'Medium', date: '23 Feb 2026', lastMsg: 'How long will it take?' },
+    { id: 'TKT-103', userId: 'U-10005', name: 'Meera Patel', avatar: 'MP', subject: 'Payment Failed', category: 'EMI', status: 'Closed', priority: 'High', date: '20 Feb 2026', lastMsg: 'Issue resolved, thank you!' },
+    { id: 'TKT-104', userId: 'U-10007', name: 'Sonia Reddy', avatar: 'SR', subject: 'Interest Rate Query', category: 'General', status: 'Open', priority: 'Low', date: '25 Feb 2026', lastMsg: 'Why is my rate 12%?' },
+];
+
+export const featuredLoansData = [
+    {
+        id: 1,
+        type: 'Personal Loan',
+        amount: '5,00,000',
+        rate: '9.3',
+        gradient: 'blue',
+        status: 'Active',
+        description: 'Apply now for instant approval and lowest interest rates.'
+    },
+    {
+        id: 2,
+        type: 'Medical Loan',
+        amount: '10,00,000',
+        rate: '10.5',
+        gradient: 'gold',
+        status: 'Coming Soon',
+        description: 'Emergency funding for your health needs. Launching soon!'
+    },
+    {
+        id: 3,
+        type: 'Career Loan',
+        amount: '15,00,000',
+        rate: '8.5',
+        gradient: 'green',
+        status: 'Coming Soon',
+        description: 'Invest in your future skills and education.'
+    }
+];

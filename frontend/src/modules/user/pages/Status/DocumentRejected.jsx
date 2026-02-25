@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { AlertCircle, ArrowLeft, RefreshCw, HelpCircle, FileX2 } from 'lucide-react';
+import { AlertCircle, ArrowLeft, RefreshCw, HelpCircle, FileX2, Info, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import MainLayout from '../../layouts/MainLayout.jsx';
 import Button from '../../components/common/Button.jsx';
@@ -10,72 +10,88 @@ const DocumentRejected = () => {
 
   return (
     <MainLayout>
-      <div className="max-w-xl mx-auto px-6 py-12 flex flex-col items-center text-center">
-        <motion.div
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="w-24 h-24 bg-red-50 rounded-full flex items-center justify-center text-red-500 mb-8"
-        >
-          <FileX2 size={48} strokeWidth={2} />
-        </motion.div>
-
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          <h1 className="text-3xl font-black text-primary mb-3">Verification Failed</h1>
-          <p className="text-textSecondary font-medium mb-8 leading-relaxed">
-            We couldn't verify your <span className="text-primary font-bold">PAN Card</span> due to a blurred image or missing details.
-          </p>
-        </motion.div>
-
-        <div className="w-full bg-white border border-border rounded-[32px] p-8 shadow-card mb-10 text-left">
-          <h3 className="text-xs font-bold text-textSecondary uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-            <AlertCircle size={14} className="text-red-500" /> Improvement Tips
-          </h3>
-
-          <ul className="space-y-4">
-            <li className="flex items-start gap-3">
-              <div className="w-5 h-5 rounded-full bg-primary/5 flex items-center justify-center shrink-0 mt-0.5">
-                <span className="text-[10px] font-bold text-primary">1</span>
-              </div>
-              <p className="text-sm text-textSecondary font-medium">Capture the document in <span className="text-primary font-bold">good lighting</span> conditions.</p>
-            </li>
-            <li className="flex items-start gap-3">
-              <div className="w-5 h-5 rounded-full bg-primary/5 flex items-center justify-center shrink-0 mt-0.5">
-                <span className="text-[10px] font-bold text-primary">2</span>
-              </div>
-              <p className="text-sm text-textSecondary font-medium">Ensure all <span className="text-primary font-bold">4 corners</span> of the card are visible in the frame.</p>
-            </li>
-            <li className="flex items-start gap-3">
-              <div className="w-5 h-5 rounded-full bg-primary/5 flex items-center justify-center shrink-0 mt-0.5">
-                <span className="text-[10px] font-bold text-primary">3</span>
-              </div>
-              <p className="text-sm text-textSecondary font-medium">Avoid using <span className="text-primary font-bold">camera flash</span> as it may cause reflections.</p>
-            </li>
-          </ul>
+      <div className="min-h-screen bg-[#F8FAFC]/50 flex flex-col items-center">
+        {/* Decorative Background */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-1/4 left-0 w-[400px] h-[400px] bg-red-500/5 rounded-full blur-[100px]" />
         </div>
 
-        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Button
-            variant="secondary"
-            className="py-5 rounded-2xl order-2 md:order-1"
-            onClick={() => navigate('/dashboard')}
-          >
-            Maybe Later
-          </Button>
-          <Button
-            className="py-5 rounded-2xl order-1 md:order-2 flex items-center gap-2"
-            onClick={() => navigate('/kyc')}
-          >
-            <RefreshCw size={18} /> Re-upload Now
-          </Button>
-        </div>
+        <div className="max-w-xl w-full mx-auto px-6 py-12 relative z-10 flex flex-col items-center text-center">
 
-        <button className="mt-8 flex items-center gap-2 text-xs font-bold text-textSecondary hover:text-primary transition-colors">
-          <HelpCircle size={16} /> Contact Support if this is a mistake
-        </button>
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 200, damping: 20 }}
+            className="w-28 h-28 bg-white rounded-[40px] shadow-[0_20px_40px_rgba(0,0,0,0.05)] flex items-center justify-center text-red-500 mb-10 border border-slate-100"
+          >
+            <FileX2 size={56} strokeWidth={2.5} />
+          </motion.div>
+
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            <h1 className="text-4xl font-black text-slate-900 mb-4 tracking-tighter">Verification Failed</h1>
+            <p className="text-slate-500 font-semibold text-lg mb-10 leading-relaxed max-w-sm mx-auto">
+              We couldn't verify your <span className="text-red-600 font-black">PAN Card</span> due to low image quality.
+            </p>
+          </motion.div>
+
+          {/* Guide Card */}
+          <motion.div
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="w-full bg-white border border-slate-200 rounded-[40px] p-8 md:p-10 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.04)] mb-10 text-left relative overflow-hidden"
+          >
+            <div className="flex items-center gap-3 mb-8">
+              <div className="p-2 bg-red-50 rounded-xl text-red-500">
+                <AlertCircle size={20} />
+              </div>
+              <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">How to fix this</h3>
+            </div>
+
+            <div className="space-y-6">
+              {[
+                { id: 1, text: "Capture the document in ", bold: "good lighting", icon: Zap, color: "text-amber-500" },
+                { id: 2, text: "Ensure all ", bold: "4 corners", textSuffix: " are visible", icon: ChevronRight, color: "text-blue-500" },
+                { id: 3, text: "Avoid using ", bold: "camera flash", textSuffix: " (no reflections)", icon: Info, color: "text-green-500" }
+              ].map((tip) => (
+                <div key={tip.id} className="flex items-center gap-4 group">
+                  <div className="w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100 group-hover:bg-white group-hover:shadow-sm transition-all">
+                    <tip.icon size={18} className={tip.color} />
+                  </div>
+                  <p className="text-sm text-slate-600 font-bold leading-tight">
+                    {tip.text}<span className="text-slate-900">{tip.bold}</span>{tip.textSuffix}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          <div className="w-full flex flex-col gap-4">
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full bg-[#0B3C6D] text-white py-6 rounded-3xl font-black text-lg shadow-[0_20px_40px_rgba(11,60,109,0.2)] flex items-center justify-center gap-3"
+              onClick={() => navigate('/kyc')}
+            >
+              <RefreshCw size={20} /> Re-upload Document
+            </motion.button>
+            <motion.button
+              whileHover={{ y: -2 }}
+              className="w-full bg-slate-100 text-slate-600 py-5 rounded-3xl font-black text-sm uppercase tracking-widest hover:bg-slate-200 transition-colors"
+              onClick={() => navigate('/dashboard')}
+            >
+              Maybe Later
+            </motion.button>
+          </div>
+
+          <button className="mt-10 flex items-center justify-center gap-2 text-xs font-black text-slate-400 hover:text-blue-600 transition-all uppercase tracking-widest">
+            <HelpCircle size={16} /> Need help? Contact Support
+          </button>
+        </div>
       </div>
     </MainLayout>
   );

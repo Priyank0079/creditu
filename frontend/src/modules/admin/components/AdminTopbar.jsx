@@ -1,21 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Bell, ChevronDown, Menu, User, Settings, LogOut, Shield } from 'lucide-react';
+import { Search, Bell, ChevronDown, Menu, User, Settings, LogOut, Shield, X } from 'lucide-react';
 
 const pageTitles = {
-    '/admin': 'Dashboard',
-    '/admin/users': 'User Management',
-    '/admin/loans': 'Loan Management',
-    '/admin/transactions': 'Transactions',
-    '/admin/emi': 'EMI Management',
-    '/admin/credit': 'Credit Score',
-    '/admin/reports': 'Reports',
-    '/admin/notifications': 'Notifications',
-    '/admin/settings': 'Settings',
+    '/dashboard/admin': 'Dashboard',
+    '/dashboard/admin/carousel': 'Carousel Management',
+    '/dashboard/admin/users': 'User Management',
+    '/dashboard/admin/loans': 'Loan Management',
+    '/dashboard/admin/transactions': 'Transactions',
+    '/dashboard/admin/emi': 'EMI Management',
+    '/dashboard/admin/credit': 'Credit Score',
+    '/dashboard/admin/reports': 'Reports',
+    '/dashboard/admin/notifications': 'Notifications',
+    '/dashboard/admin/settings': 'Settings',
 };
 
-const AdminTopbar = ({ onMenuToggle, notifCount = 3 }) => {
+const AdminTopbar = ({ onMenuToggle }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const [showProfile, setShowProfile] = useState(false);
@@ -23,6 +24,28 @@ const AdminTopbar = ({ onMenuToggle, notifCount = 3 }) => {
     const [searchFocused, setSearchFocused] = useState(false);
     const profileRef = useRef(null);
     const notifRef = useRef(null);
+
+    const [notifs, setNotifs] = useState([
+        { id: 1, text: 'New loan application from Meera Patel', time: '2m ago', icon: '📋', unread: true },
+        { id: 2, text: 'EMI overdue: Karan Singh – ₹9,050', time: '18m ago', icon: '⚠️', unread: true },
+        { id: 3, text: 'KYC verified for Vikram Nair', time: '1h ago', icon: '✅', unread: true },
+        { id: 4, text: 'Daily report generated successfully', time: '3h ago', icon: '📊', unread: false },
+    ]);
+
+    const unreadCount = notifs.filter(n => n.unread).length;
+
+    const markAllRead = () => {
+        setNotifs(prev => prev.map(n => ({ ...n, unread: false })));
+    };
+
+    const markRead = (id) => {
+        setNotifs(prev => prev.map(n => n.id === id ? { ...n, unread: false } : n));
+    };
+
+    const removeNotif = (e, id) => {
+        e.stopPropagation();
+        setNotifs(prev => prev.filter(n => n.id !== id));
+    };
 
     useEffect(() => {
         const handle = (e) => {
@@ -34,13 +57,6 @@ const AdminTopbar = ({ onMenuToggle, notifCount = 3 }) => {
     }, []);
 
     const pageTitle = pageTitles[location.pathname] || 'Admin Panel';
-
-    const notifications = [
-        { id: 1, text: 'New loan application from Meera Patel', time: '2m ago', icon: '📋', unread: true },
-        { id: 2, text: 'EMI overdue: Karan Singh – ₹9,050', time: '18m ago', icon: '⚠️', unread: true },
-        { id: 3, text: 'KYC verified for Vikram Nair', time: '1h ago', icon: '✅', unread: true },
-        { id: 4, text: 'Daily report generated successfully', time: '3h ago', icon: '📊', unread: false },
-    ];
 
     return (
         <header className="admin-topbar" style={{ justifyContent: 'space-between' }}>
@@ -112,7 +128,7 @@ const AdminTopbar = ({ onMenuToggle, notifCount = 3 }) => {
                         }}
                     >
                         <Bell size={17} />
-                        {notifCount > 0 && (
+                        {unreadCount > 0 && (
                             <span style={{
                                 position: 'absolute', top: 7, right: 7,
                                 width: 8, height: 8, borderRadius: '50%',
@@ -137,28 +153,63 @@ const AdminTopbar = ({ onMenuToggle, notifCount = 3 }) => {
                             >
                                 <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--admin-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <span style={{ fontWeight: 800, fontSize: 14, color: 'var(--admin-text)' }}>Notifications</span>
-                                    <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--admin-green)', cursor: 'pointer' }}>Mark all read</span>
-                                </div>
-                                {notifications.map(n => (
-                                    <div key={n.id} style={{
-                                        display: 'flex', gap: 12, padding: '14px 20px',
-                                        background: n.unread ? 'rgba(10,44,90,0.025)' : 'white',
-                                        borderBottom: '1px solid rgba(10,44,90,0.04)',
-                                        cursor: 'pointer', transition: 'background 0.15s',
-                                    }}
-                                        onMouseEnter={e => e.currentTarget.style.background = 'rgba(10,44,90,0.04)'}
-                                        onMouseLeave={e => e.currentTarget.style.background = n.unread ? 'rgba(10,44,90,0.025)' : 'white'}
+                                    <span
+                                        onClick={markAllRead}
+                                        style={{ fontSize: 11, fontWeight: 700, color: 'var(--admin-green)', cursor: 'pointer' }}
                                     >
-                                        <span style={{ fontSize: 18 }}>{n.icon}</span>
-                                        <div>
-                                            <p style={{ margin: 0, fontSize: 12, fontWeight: n.unread ? 700 : 500, color: 'var(--admin-text)', lineHeight: 1.4 }}>{n.text}</p>
-                                            <p style={{ margin: '3px 0 0', fontSize: 11, color: 'var(--admin-text-muted)', fontWeight: 600 }}>{n.time}</p>
+                                        Mark all read
+                                    </span>
+                                </div>
+                                <div style={{ maxHeight: 380, overflowY: 'auto' }}>
+                                    {notifs.length > 0 ? notifs.map(n => (
+                                        <div key={n.id} style={{
+                                            display: 'flex', gap: 12, padding: '14px 20px',
+                                            background: n.unread ? 'rgba(10,44,90,0.025)' : 'white',
+                                            borderBottom: '1px solid rgba(10,44,90,0.04)',
+                                            cursor: 'pointer', transition: 'background 0.15s',
+                                            position: 'relative'
+                                        }}
+                                            onClick={() => markRead(n.id)}
+                                            onMouseEnter={e => {
+                                                e.currentTarget.style.background = 'rgba(10,44,90,0.04)';
+                                                const closeBtn = e.currentTarget.querySelector('.close-notif');
+                                                if (closeBtn) closeBtn.style.opacity = 1;
+                                            }}
+                                            onMouseLeave={e => {
+                                                e.currentTarget.style.background = n.unread ? 'rgba(10,44,90,0.025)' : 'white';
+                                                const closeBtn = e.currentTarget.querySelector('.close-notif');
+                                                if (closeBtn) closeBtn.style.opacity = 0;
+                                            }}
+                                        >
+                                            <span style={{ fontSize: 18 }}>{n.icon}</span>
+                                            <div style={{ flex: 1, paddingRight: 20 }}>
+                                                <p style={{ margin: 0, fontSize: 12, fontWeight: n.unread ? 700 : 500, color: 'var(--admin-text)', lineHeight: 1.4 }}>{n.text}</p>
+                                                <p style={{ margin: '3px 0 0', fontSize: 11, color: 'var(--admin-text-muted)', fontWeight: 600 }}>{n.time}</p>
+                                            </div>
+                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
+                                                {n.unread && <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--admin-green)', flexShrink: 0 }} />}
+                                                <button
+                                                    className="close-notif"
+                                                    onClick={(e) => removeNotif(e, n.id)}
+                                                    style={{
+                                                        background: 'none', border: 'none', color: '#ef4444',
+                                                        cursor: 'pointer', opacity: 0, transition: 'opacity 0.2s',
+                                                        padding: 2, display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                                    }}
+                                                >
+                                                    <X size={12} />
+                                                </button>
+                                            </div>
                                         </div>
-                                        {n.unread && <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--admin-green)', marginTop: 4, flexShrink: 0 }} />}
-                                    </div>
-                                ))}
+                                    )) : (
+                                        <div style={{ padding: '40px 20px', textAlign: 'center' }}>
+                                            <div style={{ fontSize: 24, marginBottom: 8 }}>🔔</div>
+                                            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--admin-text-muted)' }}>No new notifications</div>
+                                        </div>
+                                    )}
+                                </div>
                                 <div style={{ padding: '12px 20px', textAlign: 'center' }}>
-                                    <button onClick={() => { navigate('/admin/notifications'); setShowNotifs(false); }}
+                                    <button onClick={() => { navigate('/dashboard/admin/notifications'); setShowNotifs(false); }}
                                         style={{ fontSize: 12, fontWeight: 700, color: 'var(--admin-primary)', background: 'none', border: 'none', cursor: 'pointer' }}>
                                         View All Notifications
                                     </button>
@@ -212,9 +263,9 @@ const AdminTopbar = ({ onMenuToggle, notifCount = 3 }) => {
                                     <div style={{ fontSize: 11, color: 'var(--admin-text-muted)', marginTop: 2 }}>admin@creditu.in</div>
                                 </div>
                                 {[
-                                    { icon: User, label: 'My Profile', path: '/admin/settings' },
-                                    { icon: Shield, label: 'Security', path: '/admin/settings' },
-                                    { icon: Settings, label: 'Settings', path: '/admin/settings' },
+                                    { icon: User, label: 'My Profile', path: '/dashboard/admin/settings' },
+                                    { icon: Shield, label: 'Security', path: '/dashboard/admin/settings' },
+                                    { icon: Settings, label: 'Settings', path: '/dashboard/admin/settings' },
                                 ].map(item => (
                                     <button key={item.label}
                                         onClick={() => { navigate(item.path); setShowProfile(false); }}
