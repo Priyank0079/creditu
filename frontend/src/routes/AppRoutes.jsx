@@ -26,6 +26,7 @@ import AdminCarousel from '../modules/admin/pages/AdminCarousel';
 import AdminKYC from '../modules/admin/pages/AdminKYC';
 import AdminSupport from '../modules/admin/pages/AdminSupport';
 import AdminLoanOffers from '../modules/admin/pages/AdminLoanOffers';
+import { nbfcRoutes } from '../modules/nbfc/nbfcRoutes';
 
 const AppRoutes = () => {
     return (
@@ -43,7 +44,7 @@ const AppRoutes = () => {
             <Route path="/status/approved" element={<LoanApproved />} />
 
             {/* ── Admin Panel Routes ───────────────────────── */}
-            <Route path="/dashboard/admin" element={<AdminLayout />}>
+            <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<AdminDashboard />} />
                 <Route path="users" element={<AdminUsers />} />
                 <Route path="loans" element={<AdminLoans />} />
@@ -58,6 +59,8 @@ const AppRoutes = () => {
                 <Route path="support" element={<AdminSupport />} />
                 <Route path="offers" element={<AdminLoanOffers />} />
             </Route>
+
+            {nbfcRoutes}
         </Routes>
     );
 };
