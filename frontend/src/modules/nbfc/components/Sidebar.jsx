@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 const links = [
     { to: '/nbfc', label: 'Dashboard' },
-    { to: '/nbfc/register', label: 'Registration' },
+    { to: '/nbfc/view', label: 'View' },
     { to: '/nbfc/products', label: 'Products' },
     { to: '/nbfc/applications', label: 'Applications' },
 ];
@@ -13,7 +13,7 @@ const Sidebar = ({ open, onClose }) => {
     return (
         <aside className={`nbfc-sidebar ${open ? 'open' : ''}`}>
             <div className="nbfc-sidebar-brand-wrap">
-                <img src="/images/image.png" alt="CreditU" className="nbfc-sidebar-logo" />
+                <span className="nbfc-sidebar-brand">NBFC Portal</span>
             </div>
             <nav className="nbfc-sidebar-nav" aria-label="NBFC primary navigation">
                 {links.map((item) => (

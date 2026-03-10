@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import NBFCForm from '../components/NBFCForm';
+import '../styles.css';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -11,33 +12,47 @@ const Register = () => {
         setToastOpen(true);
         setTimeout(() => {
             setToastOpen(false);
-            navigate('/nbfc');
+            navigate('/auth'); // Navigate to auth after registration
         }, 1200);
     };
 
     return (
-        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
-            <section style={{ marginBottom: 12 }}>
-                <h2 style={{ margin: 0, color: '#0a2c5a' }}>NBFC Registration</h2>
-                <p style={{ margin: '6px 0 0', color: '#64748b', fontSize: 13 }}>
-                    Register your NBFC profile with compliance details and RBI license document.
-                </p>
-            </section>
-            <NBFCForm onSubmit={onFormSubmit} />
+        <div className="min-h-screen bg-[#f3f8ff] flex items-center justify-center p-6">
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="w-full max-w-4xl"
+            >
+                <header className="mb-8 text-center">
+                    <h1 className="text-3xl font-black text-[#0a2c5a] mb-2">NBFC Onboarding</h1>
+                    <p className="text-gray-500 font-medium">Register your branch before accessing the portal</p>
+                </header>
+
+                <NBFCForm onSubmit={onFormSubmit} />
+
+                <div className="mt-8 text-center">
+                    <button
+                        onClick={() => navigate('/auth')}
+                        className="text-[#0a2c5a] font-bold hover:underline text-sm"
+                    >
+                        Already registered? Go to Login
+                    </button>
+                </div>
+            </motion.div>
 
             <AnimatePresence>
-                {toastOpen ? (
+                {toastOpen && (
                     <motion.div
                         className="nbfc-toast"
-                        initial={{ opacity: 0, y: -8 }}
+                        initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -8 }}
+                        exit={{ opacity: 0, y: -20 }}
                     >
-                        Registration submitted successfully.
+                        Registration submitted successfully!
                     </motion.div>
-                ) : null}
+                )}
             </AnimatePresence>
-        </motion.div>
+        </div>
     );
 };
 

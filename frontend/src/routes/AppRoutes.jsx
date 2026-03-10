@@ -2,7 +2,8 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Dashboard from '../modules/user/pages/Dashboard/Dashboard';
 import Login from '../modules/user/pages/Auth/Login';
-import Register from '../modules/user/pages/Auth/Register';
+import UserRegister from '../modules/user/pages/Auth/Register';
+import NBFCRegister from '../modules/nbfc/pages/Register';
 import Splash from '../modules/user/pages/Splash/Splash';
 import KYCVerification from '../modules/user/pages/KYC/KYCVerification';
 import ProfileCompletion from '../modules/user/pages/Profile/ProfileCompletion';
@@ -35,7 +36,8 @@ const AppRoutes = () => {
             <Route path="/" element={<Splash />} />
             <Route path="/auth" element={<AuthScreen />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/register" element={<UserRegister />} />
+            <Route path="/nbfc-register" element={<NBFCRegister />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/kyc" element={<KYCVerification />} />
             <Route path="/eligibility" element={<CheckEligibility />} />
