@@ -102,7 +102,7 @@ const Features = () => {
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-12 text-gold font-bold uppercase tracking-[0.2em] mb-4">Why creditU</h2>
           <h3 className="text-3xl md:text-4xl font-black text-primary mb-4">
-            Banking built for the <span className="gradient-text">Modern Generation</span>
+            Banking built for the Modern Generation
           </h3>
           <p className="text-lg text-textSecondary font-medium">
             We've removed the hurdles of traditional lending. Fast, secure, and entirely on your terms.
