@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ArrowUpRight, Lock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const products = [
   {
@@ -35,6 +36,7 @@ const products = [
 const WebsiteLoanProducts = () => {
   const sectionRef = useRef(null);
   const cardsRef = useRef([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -130,7 +132,9 @@ const WebsiteLoanProducts = () => {
                 </div>
               </div>
 
-              <button className={`w-full mt-8 py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${
+              <button 
+                onClick={() => product.active && navigate('/download')}
+                className={`w-full mt-8 py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${
                 product.active 
                   ? 'bg-gold text-primary hover:bg-gold-dark' 
                   : 'bg-slate-50 text-slate-400 cursor-not-allowed'

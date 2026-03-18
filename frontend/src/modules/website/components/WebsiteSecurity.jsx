@@ -30,7 +30,7 @@ const WebsiteSecurity = () => {
   const features = [
     { icon: <Lock size={28} />, title: 'RBI Compliant', desc: 'Operating under strict RBI regulations for your peace of mind.' },
     { icon: <ShieldCheck size={28} />, title: '256-bit SSL', desc: 'Bank-grade encryption protecting all your data transfers.' },
-    { icon: <EyeOff size={28} />, title: 'Fraud Detection', desc: 'AI-driven monitoring systems to detect suspicious activities.' },
+    { icon: <EyeOff size={28} />, title: 'Fraud Detection', desc: 'Advanced monitoring systems to detect suspicious activities.' },
     { icon: <FileKey size={28} />, title: 'AML Screening', desc: 'Secure anti-money laundering checks on every application.' },
   ];
 

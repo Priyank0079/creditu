@@ -82,19 +82,19 @@ const WebsiteHero = () => {
           </h1>
           
           <p ref={textRef} className="text-lg text-textSecondary max-w-xl mx-auto lg:mx-0 mb-8 font-medium">
-            AI-powered credit system. No paperwork. 100% digital. Experience the future of personal finance with creditU.
+            Smart credit system. No paperwork. 100% digital. Experience the future of personal finance with creditU.
           </p>
           
           <div ref={buttonsRef} className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
             <button 
-              onClick={() => navigate('/user/auth')}
+              onClick={() => navigate('/download')}
               className="btn-premium btn-primary-website py-3 px-8 text-base group"
             >
               Check Eligibility 
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </button>
             <button 
-              onClick={() => navigate('/user/register')}
+              onClick={() => navigate('/download')}
               className="btn-premium bg-white border-2 border-slate-200 text-primary hover:border-primary py-3 px-8 text-base"
             >
               Get Started

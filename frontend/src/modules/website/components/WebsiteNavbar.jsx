@@ -53,13 +53,13 @@ const WebsiteNavbar = () => {
         {/* CTA Buttons */}
         <div className="hidden md:flex items-center gap-4">
           <button 
-            onClick={() => navigate('/user/login')}
+            onClick={() => navigate('/download')}
             className="text-primary font-bold hover:text-primary-dark transition-colors"
           >
             Login
           </button>
           <button 
-            onClick={() => navigate('/user/auth')}
+            onClick={() => navigate('/download')}
             className="btn-premium btn-primary-website py-3"
           >
             Get Started <ArrowRight size={18} />
@@ -99,7 +99,7 @@ const WebsiteNavbar = () => {
                 <button 
                   onClick={() => {
                     setIsMobileMenuOpen(false);
-                    navigate('/user/login');
+                    navigate('/download');
                   }}
                   className="text-primary font-bold py-3 text-left"
                 >
@@ -108,7 +108,7 @@ const WebsiteNavbar = () => {
                 <button 
                   onClick={() => {
                     setIsMobileMenuOpen(false);
-                    navigate('/user/auth');
+                    navigate('/download');
                   }}
                   className="btn-premium btn-primary-website py-3 w-full"
                 >

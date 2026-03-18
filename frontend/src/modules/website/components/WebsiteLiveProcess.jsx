@@ -60,7 +60,7 @@ const WebsiteLiveProcess = () => {
         <div className="flex-1 lg:max-w-xl">
           <h2 className="text-12 text-gold font-bold uppercase tracking-[0.2em] mb-4">Real-time Processing</h2>
           <h3 className="text-3xl md:text-4xl font-black text-white mb-6">
-            Experience the <span className="text-gold">Power of AI</span> in action
+            Experience the <span className="text-gold">Speed of Credit</span> in action
           </h3>
           <p className="text-white/70 text-lg font-medium mb-10 leading-relaxed">
             Our proprietary core engine evaluates over 2,000 data points in micro-seconds to ensure you get the absolute best credit offer tailored to your profile.

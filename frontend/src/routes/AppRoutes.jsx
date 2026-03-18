@@ -30,12 +30,14 @@ import AdminLoanOffers from '../modules/admin/pages/AdminLoanOffers';
 import { nbfcRoutes } from '../modules/nbfc/nbfcRoutes';
 
 import LandingPage from '../modules/website/pages/LandingPage';
+import DownloadApp from '../modules/website/pages/DownloadApp';
 
 const AppRoutes = () => {
     return (
         <Routes>
             {/* ── Website / Landing Page ─────────────────────── */}
             <Route path="/" element={<LandingPage />} />
+            <Route path="/download" element={<DownloadApp />} />
 
             {/* ── User Module (Grouped under /user) ───────────── */}
             <Route path="/user">

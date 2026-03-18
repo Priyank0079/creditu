@@ -23,7 +23,7 @@ const DEFAULT_SLIDES = [
         img: 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&q=80&fit=crop',
         tag: 'Instant Approval',
         headline: 'Money in 60 Seconds',
-        sub: 'AI-powered credit check. Funds in your account before you know it.',
+        sub: 'Instant credit check. Funds in your account before you know it.',
         cta: 'Check Eligibility',
         overlayFrom: 'rgba(34,6,64,0.80)',
         overlayTo: 'rgba(34,6,64,0.10)',

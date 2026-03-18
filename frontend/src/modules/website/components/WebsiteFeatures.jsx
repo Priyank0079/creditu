@@ -9,7 +9,7 @@ const features = [
   {
     icon: <Zap size={32} className="text-gold" />,
     title: 'Instant Approval',
-    description: 'Get your loan approved within seconds using our proprietary AI engine.',
+    description: 'Get your loan approved within seconds using our advanced matching engine.',
     bg: 'bg-gold/5',
   },
   {
@@ -27,7 +27,7 @@ const features = [
   {
     icon: <LineChart size={32} className="text-green-600" />,
     title: 'Smart Credit Engine',
-    description: 'Our AI analyzes thousands of data points to give you the best interest rates.',
+    description: 'Our system analyzes thousands of data points to give you the best interest rates.',
     bg: 'bg-green-50',
   },
 ];

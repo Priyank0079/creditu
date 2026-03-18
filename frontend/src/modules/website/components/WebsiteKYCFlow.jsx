@@ -7,7 +7,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const steps = [
   { id: 1, title: 'Mobile OTP Verification', icon: <Smartphone />, desc: 'Instant verification with secure OTP system.' },
-  { id: 2, title: 'PAN Verification', icon: <CreditCard />, desc: 'AI-powered document OCR for instant PAN check.' },
+  { id: 2, title: 'PAN Verification', icon: <CreditCard />, desc: 'Automated document OCR for instant PAN check.' },
   { id: 3, title: 'Aadhaar Verification', icon: <BadgeCheck />, desc: 'Secure Paperless e-KYC integration.' },
   { id: 4, title: 'Selfie + Face Match', icon: <Camera />, desc: 'Biometric face matching with liveness detection.' },
   { id: 5, title: 'Bank Verification', icon: <Building2 />, desc: 'Instant penny drop and bank statement verification.' },
