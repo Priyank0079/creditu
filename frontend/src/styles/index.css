@@ -166,3 +166,35 @@
   z-index: -1;
   animation: floatGlow 10s ease-in-out infinite;
 }
+
+/* ── Website Specific Styles ────────────────────────── */
+
+.premium-gradient {
+  background: linear-gradient(135deg, #0B3C6D 0%, #0d3870 55%, #0f4a8a 100%);
+}
+
+.gold-gradient {
+  background: linear-gradient(135deg, #F4B400 0%, #FFD166 100%);
+}
+
+.btn-premium {
+  @apply px-6 py-3 rounded-full font-bold transition-all duration-300 transform active:scale-95 flex items-center justify-center gap-2;
+}
+
+.btn-primary-website {
+  @apply premium-gradient text-white hover:opacity-90 shadow-premium;
+}
+
+.btn-gold-website {
+  @apply gold-gradient text-primary hover:opacity-90 shadow-soft;
+}
+
+.gradient-text {
+  @apply bg-clip-text text-transparent inline-block premium-gradient;
+}
+
+.gsap-reveal {
+  opacity: 1;
+}
+
+/* ────────────────────────────────────────────────── */

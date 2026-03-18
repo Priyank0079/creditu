@@ -75,14 +75,14 @@ const DocumentRejected = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="w-full bg-[#0B3C6D] text-white py-6 rounded-3xl font-black text-lg shadow-[0_20px_40px_rgba(11,60,109,0.2)] flex items-center justify-center gap-3"
-              onClick={() => navigate('/kyc')}
+              onClick={() => navigate('/user/kyc')}
             >
               <RefreshCw size={20} /> Re-upload Document
             </motion.button>
             <motion.button
               whileHover={{ y: -2 }}
               className="w-full bg-slate-100 text-slate-600 py-5 rounded-3xl font-black text-sm uppercase tracking-widest hover:bg-slate-200 transition-colors"
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate('/user/dashboard')}
             >
               Maybe Later
             </motion.button>

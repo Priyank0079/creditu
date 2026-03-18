@@ -64,7 +64,7 @@ const Navbar = () => {
             sub: 'Main Control Center',
             color: '#3B82F6',
             bg: 'rgba(59, 130, 246, 0.12)',
-            path: '/dashboard'
+            path: '/user/dashboard'
         },
         {
             icon: ShieldCheck,
@@ -72,7 +72,7 @@ const Navbar = () => {
             sub: 'Verification Details',
             color: '#10B981',
             bg: 'rgba(16, 185, 129, 0.12)',
-            path: '/kyc'
+            path: '/user/kyc'
         },
         {
             icon: Settings,
@@ -80,7 +80,7 @@ const Navbar = () => {
             sub: 'Profile Preferences',
             color: '#6366F1',
             bg: 'rgba(99, 102, 241, 0.12)',
-            path: '/status'
+            path: '/user/status'
         },
     ];
 
@@ -145,7 +145,7 @@ const Navbar = () => {
                 <div style={{ maxWidth: 1000, margin: '0 auto', padding: '0 24px', height: 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 
                     {/* ── Logo Section */}
-                    <Link to="/dashboard" style={{ textDecoration: 'none' }}>
+                    <Link to="/user/dashboard" style={{ textDecoration: 'none' }}>
                         <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.98 }} style={{ display: 'flex', alignItems: 'center' }}>
                             <img src="/images/image.png" alt="Creditu" style={{ height: 36, width: 'auto', filter: 'drop-shadow(0 4px 12px rgba(11,60,109,0.15))' }} />
                         </motion.div>
@@ -275,7 +275,7 @@ const Navbar = () => {
                                             <motion.button
                                                 whileHover={{ scale: 1.02, backgroundColor: '#EF4444', color: '#FFFFFF' }}
                                                 whileTap={{ scale: 0.98 }}
-                                                onClick={() => navigate('/')}
+                                                onClick={() => navigate('/user/')}
                                                 style={{
                                                     width: '100%', padding: '14px', borderRadius: 16, border: 'none', background: '#FEF2F2',
                                                     color: '#EF4444', fontSize: 12, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1px',

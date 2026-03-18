@@ -130,7 +130,7 @@ const AuthScreen = () => {
             if (code === VALID_OTP) {
                 if (mode === 'signup') localStorage.setItem('registeredUser', JSON.stringify({ fullName, email, mobile }));
                 setStep(3);
-                setTimeout(() => navigate('/dashboard'), 2000);
+                setTimeout(() => navigate('/user/dashboard'), 2000);
             } else {
                 setError('Invalid OTP. Try 1 2 3 4 for demo.');
             }

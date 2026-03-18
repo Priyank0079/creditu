@@ -92,7 +92,7 @@ const KYCVerification = () => {
       setUploading(false);
       setVerificationSuccess(true);
       setTimeout(() => {
-        navigate('/status');
+        navigate('/user/status');
       }, 2000);
     }, 2000);
   };

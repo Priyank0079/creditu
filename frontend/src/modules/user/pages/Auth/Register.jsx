@@ -31,7 +31,7 @@ const Register = () => {
         setIsLoading(true);
         setTimeout(() => {
             setIsLoading(false);
-            navigate('/kyc');
+            navigate('/user/kyc');
         }, 1500);
     };
 

@@ -161,7 +161,7 @@ const LoanApproved = () => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="w-full bg-[#0B3C6D] text-white py-6 rounded-3xl font-black text-lg shadow-[0_20px_40px_rgba(11,60,109,0.2)] flex items-center justify-center gap-3"
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate('/user/dashboard')}
             >
               Go to Dashboard <ArrowRight size={20} className="ml-1" />
             </motion.button>

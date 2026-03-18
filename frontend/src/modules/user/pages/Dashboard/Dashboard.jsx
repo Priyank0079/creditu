@@ -38,16 +38,16 @@ const Dashboard = () => {
     }, []);
 
     const categories = [
-        { id: 1, icon: FileCheck, title: 'Eligibility Check', status: 'Completed', path: '/status' },
-        { id: 2, icon: UserCheck, title: 'KYC Verification', status: 'Action', path: '/kyc' },
-        { id: 3, icon: MapPin, title: 'Income Details', status: 'Pending', path: '/kyc' },
-        { id: 4, icon: ShieldCheck, title: 'Selfie Verification', status: 'Pending', path: '/kyc' },
+        { id: 1, icon: FileCheck, title: 'Eligibility Check', status: 'Completed', path: '/user/status' },
+        { id: 2, icon: UserCheck, title: 'KYC Verification', status: 'Action', path: '/user/kyc' },
+        { id: 3, icon: MapPin, title: 'Income Details', status: 'Pending', path: '/user/kyc' },
+        { id: 4, icon: ShieldCheck, title: 'Selfie Verification', status: 'Pending', path: '/user/kyc' },
         { id: 5, icon: Briefcase, title: 'Career Loan', disabled: true },
         { id: 6, icon: Stethoscope, title: 'Medical Loan', disabled: true },
     ];
 
     const handleApply = () => {
-        navigate('/eligibility');
+        navigate('/user/eligibility');
     };
 
     const categoriesRef = useRef(null);
@@ -77,7 +77,7 @@ const Dashboard = () => {
                         <p className="text-textSecondary font-medium mt-1">Here's your loan application status.</p>
                     </div>
                     <div
-                        onClick={() => navigate('/status')}
+                        onClick={() => navigate('/user/status')}
                         className="flex items-center gap-3 p-2 rounded-2xl border border-[rgba(11,60,109,0.12)] cursor-pointer hover:border-gold/50 transition-all hover:shadow-md"
                         style={{ background: 'var(--card-bg)', backdropFilter: 'blur(8px)' }}
                     >
@@ -115,7 +115,7 @@ const Dashboard = () => {
                 </section>
 
                 {/* Progress Card */}
-                <section className="mb-12 cursor-pointer" onClick={() => navigate('/kyc')}>
+                <section className="mb-12 cursor-pointer" onClick={() => navigate('/user/kyc')}>
                     <ProgressCard percentage={35} />
                 </section>
 
@@ -170,7 +170,7 @@ const Dashboard = () => {
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => navigate('/status')}
+                            onClick={() => navigate('/user/status')}
                             style={{ background: 'linear-gradient(135deg, #0B3C6D 0%, #1a5a9e 100%)', boxShadow: '0 8px 24px rgba(11,60,109,0.30)' }}
                             className="text-white px-8 py-4 rounded-2xl font-bold min-w-[200px]"
                         >

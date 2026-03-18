@@ -29,21 +29,31 @@ import AdminSupport from '../modules/admin/pages/AdminSupport';
 import AdminLoanOffers from '../modules/admin/pages/AdminLoanOffers';
 import { nbfcRoutes } from '../modules/nbfc/nbfcRoutes';
 
+import LandingPage from '../modules/website/pages/LandingPage';
+
 const AppRoutes = () => {
     return (
         <Routes>
-            {/* ── User / Public Routes ─────────────────────── */}
-            <Route path="/" element={<Splash />} />
-            <Route path="/auth" element={<AuthScreen />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<UserRegister />} />
+            {/* ── Website / Landing Page ─────────────────────── */}
+            <Route path="/" element={<LandingPage />} />
+
+            {/* ── User Module (Grouped under /user) ───────────── */}
+            <Route path="/user">
+                <Route index element={<Splash />} />
+                <Route path="auth" element={<AuthScreen />} />
+                <Route path="login" element={<Login />} />
+                <Route path="register" element={<UserRegister />} />
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="kyc" element={<KYCVerification />} />
+                <Route path="eligibility" element={<CheckEligibility />} />
+                <Route path="status" element={<ProfileCompletion />} />
+                <Route path="status/rejected" element={<DocumentRejected />} />
+                <Route path="status/approved" element={<LoanApproved />} />
+            </Route>
+
+            {/* ── NBFC Routes ─────────────────────────────── */}
             <Route path="/nbfc-register" element={<NBFCRegister />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/kyc" element={<KYCVerification />} />
-            <Route path="/eligibility" element={<CheckEligibility />} />
-            <Route path="/status" element={<ProfileCompletion />} />
-            <Route path="/status/rejected" element={<DocumentRejected />} />
-            <Route path="/status/approved" element={<LoanApproved />} />
+            {nbfcRoutes}
 
             {/* ── Admin Panel Routes ───────────────────────── */}
             <Route path="/admin" element={<AdminLayout />}>
@@ -61,8 +71,6 @@ const AppRoutes = () => {
                 <Route path="support" element={<AdminSupport />} />
                 <Route path="offers" element={<AdminLoanOffers />} />
             </Route>
-
-            {nbfcRoutes}
         </Routes>
     );
 };

@@ -156,9 +156,9 @@ const ProfileCompletion = () => {
               whileTap={{ scale: 0.98 }}
               className="w-full bg-[#0B3C6D] text-white py-5 rounded-3xl font-black text-lg shadow-[0_15px_35px_rgba(11,60,109,0.25)] flex items-center justify-center gap-3 transition-all active:bg-[#082d52]"
               onClick={() => {
-                if (status === 'approved') navigate('/status/approved');
-                else if (status === 'rejected') navigate('/kyc');
-                else navigate('/dashboard');
+                if (status === 'approved') navigate('/user/status/approved');
+                else if (status === 'rejected') navigate('/user/kyc');
+                else navigate('/user/dashboard');
               }}
             >
               {current.cta}

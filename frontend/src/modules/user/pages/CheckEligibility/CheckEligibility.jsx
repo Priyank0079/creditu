@@ -106,7 +106,7 @@ const CheckEligibility = () => {
 
             <Button
               className="w-full py-5 rounded-2xl"
-              onClick={() => navigate('/kyc')}
+              onClick={() => navigate('/user/kyc')}
             >
               Proceed to KYC <ArrowRight size={18} className="ml-1" />
             </Button>
