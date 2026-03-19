@@ -31,6 +31,8 @@ import { nbfcRoutes } from '../modules/nbfc/nbfcRoutes';
 
 import LandingPage from '../modules/website/pages/LandingPage';
 import DownloadApp from '../modules/website/pages/DownloadApp';
+import LegalPrivacy from '../modules/website/pages/LegalPrivacy';
+import LegalTerms from '../modules/website/pages/LegalTerms';
 
 const AppRoutes = () => {
     return (
@@ -38,6 +40,8 @@ const AppRoutes = () => {
             {/* ── Website / Landing Page ─────────────────────── */}
             <Route path="/" element={<LandingPage />} />
             <Route path="/download" element={<DownloadApp />} />
+            <Route path="/legal/privacy" element={<LegalPrivacy />} />
+            <Route path="/legal/terms" element={<LegalTerms />} />
 
             {/* ── User Module (Grouped under /user) ───────────── */}
             <Route path="/user">

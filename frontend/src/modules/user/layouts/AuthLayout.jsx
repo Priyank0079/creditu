@@ -1,7 +1,96 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ShieldCheck, TrendingUp, Users, BadgeCheck } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ShieldCheck, TrendingUp, Users, BadgeCheck, Globe, ChevronDown, Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
+const languages = [
+  { id: 'hn', name: 'Hindi', native: 'हिंदी' },
+  { id: 'tm', name: 'Tamil', native: 'தமிழ்' },
+  { id: 'te', name: 'Telugu', native: 'తెలుగు' },
+  { id: 'kn', name: 'Kannada', native: 'ಕನ್ನಡ' },
+  { id: 'ml', name: 'Malayalam', native: 'മലയാളം' },
+  { id: 'mr', name: 'Marathi', native: 'मराठी' },
+  { id: 'bn', name: 'Bengali', native: 'বাংলা' },
+  { id: 'gj', name: 'Gujarati', native: 'ગુજરાતી' },
+  { id: 'od', name: 'Odia', native: 'ଓଡ଼ିଆ' },
+  { id: 'pb', name: 'Punjabi', native: 'ਪੰਜਾਬੀ' },
+  { id: 'en', name: 'English', native: 'English' },
+];
+
+const LanguageSelector = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState(() => {
+    const saved = localStorage.getItem('app_lang');
+    return languages.find(l => l.id === saved) || languages[10]; // Default to English
+  });
+
+  const handleSelect = (lang) => {
+    setSelected(lang);
+    setIsOpen(false);
+    localStorage.setItem('app_lang', lang.id);
+  };
+
+  return (
+    <div className="relative">
+      <button 
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-2 px-4 py-2 bg-[#F8F9FC] border-2 border-gray-50 rounded-xl hover:border-[#F4A100] transition-all group"
+      >
+        <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-sm group-hover:text-[#F4A100] transition-colors">
+          <Globe size={16} />
+        </div>
+        <div className="text-left hidden sm:block">
+          <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">Language</p>
+          <p className="text-xs font-bold text-[#0A2C5A]">{selected.name}</p>
+        </div>
+        <ChevronDown size={14} className={`text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+              className="fixed inset-0 z-40"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              className="absolute top-full right-0 mt-3 w-56 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 overflow-hidden"
+            >
+              <div className="p-2 max-h-[400px] overflow-y-auto scrollbar-hide">
+                <p className="px-3 py-2 text-[10px] font-black uppercase tracking-widest text-[#F4A100] mb-1">Select App Language</p>
+                <div className="grid grid-cols-1 gap-1">
+                  {languages.map((lang) => (
+                    <button
+                      key={lang.id}
+                      type="button"
+                      onClick={() => handleSelect(lang)}
+                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all ${
+                        selected.id === lang.id 
+                          ? 'bg-[#0A2C5A] text-white' 
+                          : 'hover:bg-[#F8F9FC] text-[#0A2C5A]'
+                      }`}
+                    >
+                      <div className="flex flex-col items-start translate-y-[1px]">
+                        <span className="text-xs font-bold">{lang.name}</span>
+                        <span className={`text-[10px] ${selected.id === lang.id ? 'text-white/60' : 'text-gray-400 font-medium'}`}>{lang.native}</span>
+                      </div>
+                      {selected.id === lang.id && <Check size={14} className="text-[#F4A100]" />}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
 
 const AuthLayout = ({ children }) => {
   return (
@@ -155,6 +244,12 @@ const AuthLayout = ({ children }) => {
 
         {/* Right panel — form area */}
         <div className="flex-1 flex flex-col items-center justify-center px-6 py-10 md:py-14 bg-white relative">
+          
+          {/* Language Selector */}
+          <div className="absolute top-6 right-6 z-50">
+            <LanguageSelector />
+          </div>
+
           {/* Subtle top-right accent */}
           <div className="hidden md:block absolute top-0 right-0 w-40 h-40 rounded-bl-[80px] bg-[#F4A100]/10 pointer-events-none" />
           <div className="hidden md:block absolute bottom-0 left-0 w-32 h-32 rounded-tr-[60px] bg-[#0A2C5A]/04 pointer-events-none" />

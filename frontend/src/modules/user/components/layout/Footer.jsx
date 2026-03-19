@@ -1,12 +1,12 @@
-import React from 'react';
-import { ShieldCheck, Info, MessageCircle } from 'lucide-react';
+import { ShieldCheck, Info, MessageCircle, Facebook, Instagram } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
     <footer className="bg-white border-t border-border mt-auto">
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-          <div className="col-span-1 md:col-span-2">
+          <div className="col-span-1">
             <div className="flex items-center gap-2 mb-6">
               <img
                 src="/images/image.png"
@@ -15,9 +15,17 @@ const Footer = () => {
                 style={{ mixBlendMode: 'multiply' }}
               />
             </div>
-            <p className="text-textSecondary text-sm max-w-sm leading-relaxed">
+            <p className="text-textSecondary text-sm leading-relaxed mb-6">
               We provide smart financial solutions to help you achieve your dreams. Secure, fast, and transparent loan processes designed for the modern user.
             </p>
+            <div className="flex gap-4">
+              <a href="https://www.facebook.com/profile.php?id=61579571376717" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-gray-50 text-textSecondary hover:bg-primary/5 hover:text-primary transition-all">
+                <Facebook size={18} />
+              </a>
+              <a href="https://www.instagram.com/creditu.in?igsh=MTF3M205ZjdtYThv" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-gray-50 text-textSecondary hover:bg-primary/5 hover:text-primary transition-all">
+                <Instagram size={18} />
+              </a>
+            </div>
           </div>
 
           <div>
@@ -32,9 +40,32 @@ const Footer = () => {
           <div>
             <h4 className="font-bold text-primary mb-6">Legal</h4>
             <ul className="space-y-4 text-sm text-textSecondary">
-              <li className="hover:text-primary cursor-pointer transition-colors">Privacy Policy</li>
-              <li className="hover:text-primary cursor-pointer transition-colors">Terms of Service</li>
+              <li className="hover:text-primary cursor-pointer transition-colors">
+                <Link to="/legal/privacy">Privacy Policy</Link>
+              </li>
+              <li className="hover:text-primary cursor-pointer transition-colors">
+                <Link to="/legal/terms" className="whitespace-nowrap">Terms and Condition</Link>
+              </li>
               <li className="hover:text-primary cursor-pointer transition-colors">Security</li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-bold text-primary mb-6">Contact</h4>
+            <ul className="space-y-4 text-sm text-textSecondary">
+              <li>
+                <p className="text-[10px] uppercase font-bold text-slate-400">Customer Care</p>
+                <p className="font-semibold text-primary">care@creditu.in</p>
+              </li>
+              <li>
+                <p className="text-[10px] uppercase font-bold text-slate-400">Grievance Redressal</p>
+                <p className="font-semibold text-primary">grievance@creditu.in</p>
+                <p className="text-[10px] mt-1 text-primary">Salvin Prabhakar: +91 9353539159</p>
+              </li>
+              <li>
+                <p className="text-[10px] uppercase font-bold text-slate-400">Corporate</p>
+                <p className="font-semibold text-primary">i@creditu.in</p>
+              </li>
             </ul>
           </div>
         </div>
@@ -46,7 +77,7 @@ const Footer = () => {
           </div>
 
           <p className="text-[10px] text-textSecondary font-bold uppercase tracking-widest">
-            © 2026 Creditu Finance. All Rights Reserved.
+            © 2026 creditU Private Limited. All Rights Reserved.
           </p>
 
           <div className="flex items-center gap-4">
