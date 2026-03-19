@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+﻿import React, { useEffect } from 'react';
 import WebsiteNavbar from '../components/WebsiteNavbar';
 import WebsiteFooter from '../components/WebsiteFooter';
 import { Shield, Lock, Eye, FileText, Bell, RefreshCw } from 'lucide-react';
@@ -114,7 +114,7 @@ const LegalPrivacy = () => {
                         Our compliance team is here to help if you need further clarification on our data handling practices or have specific privacy concerns.
                     </p>
                     <a 
-                        href="mailto:i@creditu.in" 
+                        href="mailto:info@creditu.in" 
                         className="inline-flex items-center gap-2 bg-gold text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-gold-dark transition-all relative z-10 shadow-lg"
                     >
                         Contact Privacy Team
@@ -128,3 +128,4 @@ const LegalPrivacy = () => {
 };
 
 export default LegalPrivacy;
+

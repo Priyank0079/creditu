@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+﻿import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ArrowUpRight, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +7,16 @@ const products = [
   {
     title: 'Personal Loan',
     limit: '₹ 5,00,000',
-    interest: '9.3%',
+    interest: 'lowest intrust',
+    status: 'ACTIVE',
+    active: true,
+    bg: 'premium-gradient',
+    textColor: 'text-white',
+  },
+  {
+    title: 'Credit Line',
+    limit: '₹ 2,00,000',
+    interest: 'lowest intrust',
     status: 'ACTIVE',
     active: true,
     bg: 'premium-gradient',
@@ -16,7 +25,7 @@ const products = [
   {
     title: 'Medical Loan',
     limit: '₹ 10,00,000',
-    interest: '7.5%',
+    interest: 'lowest intrust',
     status: 'COMING SOON',
     active: false,
     bg: 'bg-white',
@@ -25,7 +34,7 @@ const products = [
   {
     title: 'Career Loan',
     limit: '₹ 3,00,000',
-    interest: '8.2%',
+    interest: 'lowest intrust',
     status: 'COMING SOON',
     active: false,
     bg: 'bg-white',
@@ -40,7 +49,7 @@ const WebsiteLoanProducts = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo(cardsRef.current, 
+      gsap.fromTo(cardsRef.current,
         { x: 100, opacity: 0 },
         {
           x: 0,
@@ -85,7 +94,7 @@ const WebsiteLoanProducts = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {products.map((product, index) => (
             <div
               key={index}
@@ -128,15 +137,15 @@ const WebsiteLoanProducts = () => {
                   <span className={`${product.active ? 'text-white/60' : 'text-textSecondary'} text-xs font-bold uppercase tracking-wider`}>
                     Interest rate
                   </span>
-                  <span className={`${product.textColor} text-lg font-black`}>starts @ {product.interest}</span>
+                  <span className={`${product.textColor} text-lg font-black`}>{product.interest}</span>
                 </div>
               </div>
 
-              <button 
+              <button
                 onClick={() => product.active && navigate('/download')}
                 className={`w-full mt-8 py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${
-                product.active 
-                  ? 'bg-gold text-primary hover:bg-gold-dark' 
+                product.active
+                  ? 'bg-gold text-primary hover:bg-gold-dark'
                   : 'bg-slate-50 text-slate-400 cursor-not-allowed'
               }`}>
                 {product.active ? 'Apply for loan' : 'Join Waitlist'}

@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Mail, Phone } from 'lucide-react';
+﻿import { Facebook, Instagram, Mail, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const WebsiteFooter = () => {
@@ -33,7 +33,7 @@ const WebsiteFooter = () => {
                   </div>
                   <div>
                     <p className="text-xs font-black uppercase tracking-widest text-slate-400 mb-1">Corporate</p>
-                    <p className="text-primary font-bold">i@creditu.in</p>
+                    <p className="text-primary font-bold">info@creditu.in</p>
                   </div>
                 </li>
                 <li className="flex gap-4">
@@ -63,7 +63,7 @@ const WebsiteFooter = () => {
                   </div>
                   <div>
                     <p className="text-xs font-black uppercase tracking-widest text-slate-400 mb-1">Grievance Officer</p>
-                    <p className="text-primary font-bold text-sm">Salvin Prabhakar</p>
+                    <p className="text-primary font-bold text-sm">Selvin</p>
                     <p className="text-primary font-bold">+91 9353539159</p>
                   </div>
                 </li>
@@ -75,7 +75,7 @@ const WebsiteFooter = () => {
         {/* Bottom Bar */}
         <div className="pt-10 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-textSecondary text-sm font-medium">
-            © 2026 creditU Private Limited. All Rights Reserved.
+            Â© 2026 creditU Technologies Private Limited. All Rights Reserved.
           </p>
           <div className="flex gap-8">
             <Link to="/legal/privacy" className="text-xs font-black uppercase tracking-widest text-slate-400 hover:text-primary transition-colors">Privacy Policy</Link>
@@ -88,3 +88,4 @@ const WebsiteFooter = () => {
 };
 
 export default WebsiteFooter;
+

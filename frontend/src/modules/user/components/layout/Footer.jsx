@@ -1,4 +1,4 @@
-import { ShieldCheck, Info, MessageCircle, Facebook, Instagram } from 'lucide-react';
+﻿import { ShieldCheck, Info, MessageCircle, Facebook, Instagram } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -60,11 +60,11 @@ const Footer = () => {
               <li>
                 <p className="text-[10px] uppercase font-bold text-slate-400">Grievance Redressal</p>
                 <p className="font-semibold text-primary">grievance@creditu.in</p>
-                <p className="text-[10px] mt-1 text-primary">Salvin Prabhakar: +91 9353539159</p>
+                <p className="text-[10px] mt-1 text-primary">Selvin: +91 9353539159</p>
               </li>
               <li>
                 <p className="text-[10px] uppercase font-bold text-slate-400">Corporate</p>
-                <p className="font-semibold text-primary">i@creditu.in</p>
+                <p className="font-semibold text-primary">info@creditu.in</p>
               </li>
             </ul>
           </div>
@@ -77,7 +77,7 @@ const Footer = () => {
           </div>
 
           <p className="text-[10px] text-textSecondary font-bold uppercase tracking-widest">
-            © 2026 creditU Private Limited. All Rights Reserved.
+            Â© 2026 creditU Technologies Private Limited. All Rights Reserved.
           </p>
 
           <div className="flex items-center gap-4">
@@ -95,3 +95,4 @@ const Footer = () => {
 };
 
 export default Footer;
+
