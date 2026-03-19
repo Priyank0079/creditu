@@ -7,7 +7,7 @@ const products = [
   {
     title: 'Personal Loan',
     limit: '₹ 5,00,000',
-    interest: 'lowest intrust',
+    interest: 'lowest interest',
     status: 'ACTIVE',
     active: true,
     bg: 'premium-gradient',
@@ -16,7 +16,7 @@ const products = [
   {
     title: 'Credit Line',
     limit: '₹ 2,00,000',
-    interest: 'lowest intrust',
+    interest: 'lowest interest',
     status: 'ACTIVE',
     active: true,
     bg: 'premium-gradient',
@@ -25,7 +25,7 @@ const products = [
   {
     title: 'Medical Loan',
     limit: '₹ 10,00,000',
-    interest: 'lowest intrust',
+    interest: 'lowest interest',
     status: 'COMING SOON',
     active: false,
     bg: 'bg-white',
@@ -34,7 +34,7 @@ const products = [
   {
     title: 'Career Loan',
     limit: '₹ 3,00,000',
-    interest: 'lowest intrust',
+    interest: 'lowest interest',
     status: 'COMING SOON',
     active: false,
     bg: 'bg-white',
