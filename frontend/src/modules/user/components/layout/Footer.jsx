@@ -1,4 +1,4 @@
-﻿import { ShieldCheck, Info, MessageCircle, Facebook, Instagram } from 'lucide-react';
+import { ShieldCheck, Info, MessageCircle, Facebook, Instagram } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -60,7 +60,7 @@ const Footer = () => {
               <li>
                 <p className="text-[10px] uppercase font-bold text-slate-400">Grievance Redressal</p>
                 <p className="font-semibold text-primary">grievance@creditu.in</p>
-                <p className="text-[10px] mt-1 text-primary">Selvin: +91 9353539159</p>
+                <p className="text-[10px] mt-1 text-primary">Selvin</p>
               </li>
               <li>
                 <p className="text-[10px] uppercase font-bold text-slate-400">Corporate</p>
