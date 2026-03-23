@@ -1,0 +1,200 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-gradient: linear-gradient(180deg, #e8f0fb 0%, #ede8f8 20%, #f5effe 38%, #fbf5ff 55%, #fef9f0 75%, #fff8e8 90%, #fef5e0 100%);
+    --text-primary: #0B3C6D;
+    --text-secondary: #64748B;
+    --card-bg: rgba(255, 255, 255, 0.7);
+    --nav-bg: rgba(255, 255, 255, 0.4);
+    --nav-scrolled: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.92) 100%);
+    --border-color: rgba(11, 60, 109, 0.08);
+  }
+
+  .dark {
+    --bg-gradient: linear-gradient(180deg, #020617 0%, #0f172a 30%, #1e1b4b 60%, #0f172a 100%);
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+    --card-bg: rgba(15, 23, 42, 0.7);
+    --nav-bg: rgba(15, 23, 42, 0.4);
+    --nav-scrolled: linear-gradient(135deg, rgba(2, 6, 23, 0.95) 0%, rgba(15, 23, 42, 0.92) 100%);
+    --border-color: rgba(248, 250, 252, 0.1);
+  }
+
+  body {
+    @apply antialiased;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-gradient);
+    color: var(--text-primary);
+    min-height: 100vh;
+    background-attachment: fixed;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-lg border border-white/20 shadow-premium;
+  }
+
+  .card-gradient-blue {
+    @apply bg-gradient-to-br from-primary to-primary-dark;
+  }
+
+  .card-gradient-gold {
+    @apply bg-gradient-to-br from-gold to-gold-dark;
+  }
+
+  .premium-shadow {
+    @apply shadow-soft;
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite ease-in-out;
+  }
+}
+
+/* Custom scrollbar for horizontal carousel */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ── Premium Animated Gradient Utilities ──────────────────────── */
+
+/* Keyframe: gradient flows bottom→top→bottom, duration 1.6s */
+@keyframes gradientFlow {
+  0% {
+    background-position: 50% 100%;
+  }
+
+  50% {
+    background-position: 50% 0%;
+  }
+
+  100% {
+    background-position: 50% 100%;
+  }
+}
+
+/* Hero/card background with animated #FFCCFF → #FFFF99 gradient */
+.animate-gradient-bg {
+  background: linear-gradient(180deg, #FFCCFF 0%, #FFFF99 50%, #FFCCFF 100%);
+  background-size: 100% 300%;
+  animation: gradientFlow 1.6s ease-in-out infinite;
+}
+
+/* Subtle card accent overlay (use on ::before or wrapper divs) */
+.animate-gradient-accent {
+  background: linear-gradient(180deg,
+      rgba(255, 204, 255, 0.18) 0%,
+      rgba(255, 255, 153, 0.12) 50%,
+      rgba(255, 204, 255, 0.18) 100%);
+  background-size: 100% 300%;
+  animation: gradientFlow 1.6s ease-in-out infinite;
+}
+
+/* Text highlight gradient */
+.gradient-text-highlight {
+  background: linear-gradient(90deg, #FFCCFF, #FFFF99);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Navbar gradient border animation */
+@keyframes navBorderFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes floatGlow {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.4;
+  }
+
+  50% {
+    transform: translate(20px, -20px) scale(1.1);
+    opacity: 0.6;
+  }
+}
+
+.purple-light-effect {
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: -1;
+  animation: floatGlow 10s ease-in-out infinite;
+}
+
+/* ── Website Specific Styles ────────────────────────── */
+
+.premium-gradient {
+  background: linear-gradient(135deg, #0B3C6D 0%, #0d3870 55%, #0f4a8a 100%);
+}
+
+.gold-gradient {
+  background: linear-gradient(135deg, #F4B400 0%, #FFD166 100%);
+}
+
+.btn-premium {
+  @apply px-6 py-3 rounded-full font-bold transition-all duration-300 transform active:scale-95 flex items-center justify-center gap-2;
+}
+
+.btn-primary-website {
+  @apply premium-gradient text-white hover:opacity-90 shadow-premium;
+}
+
+.btn-gold-website {
+  @apply gold-gradient text-primary hover:opacity-90 shadow-soft;
+}
+
+.gradient-text {
+  @apply bg-clip-text text-transparent inline-block premium-gradient;
+}
+
+.gsap-reveal {
+  opacity: 1;
+}
+
+/* ────────────────────────────────────────────────── */
