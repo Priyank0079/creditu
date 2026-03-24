@@ -78,7 +78,7 @@ const WebsiteHero = () => {
           </div>
           
           <h1 ref={headingRef} className="text-4xl md:text-6xl font-black text-primary leading-tight mb-4">
-            Get Instant Personal Loans.
+            Get Instant <span className="text-gold">Personal</span> Loans.
           </h1>
           
           <p ref={textRef} className="text-lg text-textSecondary max-w-xl mx-auto lg:mx-0 mb-8 font-medium">

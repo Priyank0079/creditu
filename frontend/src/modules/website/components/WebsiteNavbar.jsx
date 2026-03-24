@@ -17,23 +17,32 @@ const WebsiteNavbar = () => {
   }, []);
 
   const navLinks = [
-    { name: 'Features', href: '#features' },
-    { name: 'Loan Products', href: '#loans' },
-    { name: 'How It Works', href: '#how-it-works' },
-    { name: 'Security', href: '#security' },
+    { name: 'Features', href: '/#features' },
+    { name: 'Loan Products', href: '/#loan-products' },
+    { name: 'How It Works', href: '/#how-it-works' },
+    { name: 'Security', href: '/#security' },
+    { name: 'About', href: '/about' },
   ];
+
+  const handleLogoClick = () => {
+    if (window.location.pathname === '/' || window.location.pathname === '') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      navigate('/');
+    }
+  };
 
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled 
-          ? 'bg-white/80 backdrop-blur-lg shadow-soft py-4' 
-          : 'bg-transparent py-6'
+          ? 'bg-primary-light/98 backdrop-blur-lg shadow-soft py-4' 
+          : 'bg-primary-light/65 backdrop-blur-md py-6'
       }`}
     >
       <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
         {/* Logo */}
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
+        <div className="flex items-center gap-2 cursor-pointer" onClick={handleLogoClick}>
           <img src="/image.png" alt="creditU" className="h-10 w-auto" />
         </div>
 
@@ -43,7 +52,7 @@ const WebsiteNavbar = () => {
             <a
               key={link.name}
               href={link.href}
-              className="text-primary font-semibold hover:text-gold transition-colors"
+              className="text-gold font-semibold hover:text-primary transition-colors"
             >
               {link.name}
             </a>
@@ -77,14 +86,14 @@ const WebsiteNavbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-t border-slate-100 overflow-hidden"
+            className="md:hidden bg-primary-light/95 backdrop-blur-lg border-t border-slate-100 overflow-hidden"
           >
             <div className="flex flex-col p-6 gap-4">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
-                  className="text-primary font-semibold py-2"
+                  className="text-gold font-semibold py-2"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {link.name}

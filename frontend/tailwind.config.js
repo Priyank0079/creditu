@@ -10,7 +10,7 @@ export default {
                 primary: {
                     DEFAULT: '#0B3C6D',
                     dark: '#082d52',
-                    light: '#eef4ff',
+                    light: '#dbeafe',
                 },
                 gold: {
                     DEFAULT: '#F4B400',

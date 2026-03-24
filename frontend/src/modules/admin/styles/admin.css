@@ -9,7 +9,7 @@
     --admin-green-light: #00c261;
     --admin-gold: #F4A100;
     --admin-gold-light: #ffb733;
-    --admin-bg: #F5F9FF;
+    --admin-bg: #e8f0fb;
     --admin-card: #FFFFFF;
     --admin-sidebar-width: 260px;
     --admin-sidebar-collapsed: 72px;
@@ -67,7 +67,7 @@
 /* Topbar */
 .admin-topbar {
     height: var(--admin-topbar-height);
-    background: white;
+    background: var(--admin-bg);
     border-bottom: 1px solid var(--admin-border);
     box-shadow: 0 1px 16px rgba(10, 44, 90, 0.05);
     position: sticky;

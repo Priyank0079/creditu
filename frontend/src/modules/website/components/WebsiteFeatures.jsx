@@ -116,7 +116,7 @@ const WebsiteFeatures = () => {
               ref={(el) => { if (el) cardsRef.current[index] = el; }}
               className="cursor-default"
             >
-              <div className="card-inner h-full glass-card border border-slate-100 p-6 flex flex-col items-center text-center transition-all duration-300">
+              <div className="card-inner h-full glass-card border border-slate-100 p-6 flex flex-col items-center text-center transition-all duration-300 hover:bg-gradient-to-br hover:from-primary/10 hover:to-gold/20 hover:shadow-xl relative hover:z-10 hover:border-primary/30">
                 <div className={`icon-container w-16 h-16 ${feature.bg} rounded-2xl flex items-center justify-center mb-6 shadow-sm`}>
                   {React.cloneElement(feature.icon, { size: 28 })}
                 </div>
