@@ -46,7 +46,7 @@ const OTPInput = ({ value, onChange, error }) => {
                     value={digit}
                     onChange={(e) => handleChange(index, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(index, e)}
-                    className={`w-14 h-16 bg-white/5 border-2 ${error ? 'border-red-500/50' : digit ? 'border-trust/50' : 'border-white/10 focus:border-gold/50'} rounded-2xl text-center text-2xl font-bold text-white outline-none transition-all focus:bg-white/10`}
+                    className={`w-14 h-16 bg-[#F8F9FC] border-2 ${error ? 'border-red-400' : digit ? 'border-trust' : 'border-gray-100 focus:border-gold'} rounded-2xl text-center text-2xl font-black text-[#0A2C5A] outline-none transition-all focus:bg-white focus:shadow-soft`}
                 />
             ))}
         </div>

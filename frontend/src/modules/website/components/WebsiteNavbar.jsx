@@ -52,7 +52,7 @@ const WebsiteNavbar = () => {
             <a
               key={link.name}
               href={link.href}
-              className="text-gold font-semibold hover:text-primary transition-colors"
+              className="text-primary font-semibold hover:text-gold transition-colors"
             >
               {link.name}
             </a>
@@ -93,7 +93,7 @@ const WebsiteNavbar = () => {
                 <a
                   key={link.name}
                   href={link.href}
-                  className="text-gold font-semibold py-2"
+                  className="text-primary font-semibold py-2"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {link.name}

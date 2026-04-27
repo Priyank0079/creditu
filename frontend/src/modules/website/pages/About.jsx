@@ -125,6 +125,27 @@ const About = () => {
                         "creditU is registered under the Companies Act 2013 and operates in full compliance with RBI Digital Lending Guidelines 2022."
                       </p>
                     </div>
+
+                    <div className="pt-4 flex flex-wrap gap-4">
+                      <div className="flex items-center gap-3 px-4 py-2 bg-white rounded-xl border border-slate-100 shadow-sm hover:border-gold/30 transition-colors">
+                        <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center text-green-600">
+                          <CheckCircle2 size={16} />
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Certified</p>
+                          <p className="text-sm font-bold text-primary leading-none">ISO 9001:2015</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 px-4 py-2 bg-white rounded-xl border border-slate-100 shadow-sm hover:border-gold/30 transition-colors">
+                        <div className="w-8 h-8 rounded-lg bg-gold/5 flex items-center justify-center text-gold">
+                          <ShieldCheck size={16} />
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Certified</p>
+                          <p className="text-sm font-bold text-primary leading-none">ISO 27001:2022</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className="flex-1 grid grid-cols-2 gap-4">
@@ -242,7 +263,7 @@ const About = () => {
                   <div className="p-6 bg-white/10 rounded-[20px] border border-white/10 font-medium italic text-white text-sm leading-relaxed">
                     "creditU does not lend money directly. creditU is a technology and distribution platform only."
                   </div>
-                  <div className="flex flex-wrap items-center gap-12 pt-4">
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 pt-8 border-t border-white/10">
                     <div className="flex flex-col gap-1">
                       <span className="text-[10px] font-black text-gold uppercase tracking-[0.2em]">Loan Tenure</span>
                       <span className="text-lg font-black text-white">Up to 12 months</span>
@@ -250,6 +271,16 @@ const About = () => {
                     <div className="flex flex-col gap-1">
                       <span className="text-[10px] font-black text-gold uppercase tracking-[0.2em]">Compliance</span>
                       <span className="text-lg font-black text-white">RBI Guidelines 2022</span>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[10px] font-black text-gold uppercase tracking-[0.2em]">Quality Management</span>
+                      <span className="text-lg font-black text-white">ISO 9001:2015</span>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[10px] font-black text-gold uppercase tracking-[0.2em]">Information Security</span>
+                      <span className="text-lg font-black text-white flex items-center gap-2">
+                        ISO 27001:2022
+                      </span>
                     </div>
                   </div>
                 </div>
