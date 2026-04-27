@@ -258,7 +258,7 @@ const About = () => {
                 </div>
                 <div className="space-y-6 text-white/80 leading-relaxed text-base">
                   <p>
-                    <span className="font-bold text-white">creditU Private Limited</span> is a Lending Service Provider (LSP) registered under the Companies Act 2013. All loans and credit lines offered through the creditU platform are provided by our partner NBFC which is registered with and regulated by the Reserve Bank of India.
+                    <span className="font-bold text-white">creditU Technologies Private Limited</span> is a Lending Service Provider (LSP) registered under the Companies Act 2013. All loans and credit lines offered through the creditU platform are provided by our partner NBFC which is registered with and regulated by the Reserve Bank of India.
                   </p>
                   <div className="p-6 bg-white/10 rounded-[20px] border border-white/10 font-medium italic text-white text-sm leading-relaxed">
                     "creditU does not lend money directly. creditU is a technology and distribution platform only."

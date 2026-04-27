@@ -77,7 +77,7 @@ const Footer = () => {
           </div>
 
           <p className="text-[10px] text-textSecondary font-bold uppercase tracking-widest">
-            Â© 2026 creditU Technologies Private Limited. All Rights Reserved.
+            © 2026 creditU Technologies Private Limited. All Rights Reserved.
           </p>
 
           <div className="flex items-center gap-4">

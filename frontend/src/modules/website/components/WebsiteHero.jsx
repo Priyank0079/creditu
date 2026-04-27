@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { motion } from 'framer-motion';
-import { ArrowRight, Zap, ShieldCheck, Clock } from 'lucide-react';
+import { ArrowRight, Zap, ShieldCheck, Clock, CheckCircle2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import rupeeIcon from '../../../assets/rupee_3d_icon.png';
 
@@ -9,6 +9,7 @@ const WebsiteHero = () => {
   const headingRef = useRef(null);
   const textRef = useRef(null);
   const buttonsRef = useRef(null);
+  const trustRef = useRef(null);
   const card1Ref = useRef(null);
   const card2Ref = useRef(null);
   const floatingIconRef = useRef(null);
@@ -43,7 +44,15 @@ const WebsiteHero = () => {
           opacity: 1,
           duration: 0.6,
           ease: 'power2.out',
-        }, '-=0.4');
+        }, '-=0.4')
+      .fromTo(trustRef.current, 
+        { y: 20, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          ease: 'power2.out',
+        }, '-=0.3');
 
       // Floating cards animation
       gsap.fromTo([card1Ref.current, card2Ref.current], 
@@ -101,10 +110,35 @@ const WebsiteHero = () => {
             </button>
           </div>
 
-          <div className="mt-12 flex items-center justify-center lg:justify-start gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-            <img src="/image.png" alt="Trusted Partner" className="h-6" />
-            <div className="w-px h-6 bg-slate-200" />
-            <p className="text-xs font-black uppercase tracking-widest text-primary">RBI Registered NBFC Partners</p>
+          <div ref={trustRef} className="mt-12 space-y-8">
+            {/* Certification Badges */}
+            <div className="flex flex-wrap justify-center lg:justify-start gap-4">
+              <div className="flex items-center gap-3 px-4 py-2 bg-white rounded-xl border border-slate-100 shadow-sm hover:border-gold/30 transition-all duration-300 hover:shadow-md group cursor-default">
+                <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center text-green-600 group-hover:scale-110 transition-transform">
+                  <CheckCircle2 size={16} />
+                </div>
+                <div>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Certified</p>
+                  <p className="text-sm font-bold text-primary leading-none">ISO 9001:2015</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 px-4 py-2 bg-white rounded-xl border border-slate-100 shadow-sm hover:border-gold/30 transition-all duration-300 hover:shadow-md group cursor-default">
+                <div className="w-8 h-8 rounded-lg bg-gold/5 flex items-center justify-center text-gold group-hover:scale-110 transition-transform">
+                  <ShieldCheck size={16} />
+                </div>
+                <div>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Certified</p>
+                  <p className="text-sm font-bold text-primary leading-none">ISO 27001:2022</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Partner Info */}
+            <div className="flex items-center justify-center lg:justify-start gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+              <img src="/image.png" alt="Trusted Partner" className="h-6" />
+              <div className="w-px h-6 bg-slate-200" />
+              <p className="text-xs font-black uppercase tracking-widest text-primary">RBI Registered NBFC Partners</p>
+            </div>
           </div>
         </div>
 
